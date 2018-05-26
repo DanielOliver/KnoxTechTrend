@@ -5,7 +5,7 @@
     },
     "variables": {
         "functionAppName": "[concat('techtrendfunc', resourceGroup().name)]",
-        "storageName": "[concat('funcstorage', resourceGroup().name)]"
+        "storageName": "[concat('funcstorage', resourceGroup().id)]"
     },
     "resources": [
         {
