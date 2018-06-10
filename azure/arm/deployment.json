@@ -114,7 +114,7 @@
             "type": "Microsoft.Storage/storageAccounts",
             "name": "[parameters('storageName')]",
             "kind": "Storage",
-            "apiVersion": "2016-12-01",
+            "apiVersion": "2015-06-15",
             "location": "[resourceGroup().location]",
             "properties": {
                 "accountType": "Standard_LRS"
