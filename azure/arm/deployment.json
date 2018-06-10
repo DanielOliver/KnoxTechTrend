@@ -12,7 +12,7 @@
         },
         "storageName": {
             "type": "string",
-            "defaultValue": "[concat('fncstrg', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat('sg', uniqueString(subscription().subscriptionId))]",
             "maxLength": 15,
             "metadata": {
                 "description": "The name of the Storage Account"
@@ -20,7 +20,7 @@
         },
         "insightName": {
             "type": "string",
-            "defaultValue": "[concat('fncnsght', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat('in', uniqueString(subscription().subscriptionId))]",
             "maxLength": 15,
             "metadata": {
                 "description": "The name of the App Insight Account"
