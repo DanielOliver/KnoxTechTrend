@@ -44,14 +44,13 @@
     },
     "resources": [
         {
-            "comments": "Generalized from resource: '/subscriptions/f60bcaa1-8e3c-479e-8817-ff4c70c16784/resourceGroups/func3/providers/microsoft.insights/components/func3'.",
             "type": "microsoft.insights/components",
             "kind": "web",
             "name": "[parameters('functionAppName')]",
             "apiVersion": "2015-05-01",
             "location": "[resourceGroup().location]",
             "tags": {
-                "hidden-link:/subscriptions/f60bcaa1-8e3c-479e-8817-ff4c70c16784/resourceGroups/func3/providers/Microsoft.Web/sites/func3": "Resource"
+                "[concat('hidden-link:/subscriptions/', resourceGroup().id, '/resourceGroups/', parameters('functionAppName'), '/providers/Microsoft.Web/sites/', parameters('functionAppName'))]": "Resource"
             },
             "scale": null,
             "properties": {
@@ -196,7 +195,7 @@
                 "httpLoggingEnabled": false,
                 "logsDirectorySizeLimit": 35,
                 "detailedErrorLoggingEnabled": false,
-                "publishingUsername": "$func3",
+                "publishingUsername": "$user3",
                 "publishingPassword": null,
                 "appSettings": null,
                 "metadata": null,
@@ -286,12 +285,12 @@
         },
         {
             "type": "Microsoft.Web/sites/hostNameBindings",
-            "name": "[concat(parameters('functionAppName'), '/', parameters('functionAppNameBinding'))]",
+            "name": "[concat(parameters('functionAppName'), '/', variables('functionAppNameBinding'))]",
             "apiVersion": "2016-08-01",
             "location": "[resourceGroup().location]",
             "scale": null,
             "properties": {
-                "siteName": "func3",
+                "siteName": "[parameters('functionAppName')]",
                 "domainId": null,
                 "hostNameType": "Verified"
             },
