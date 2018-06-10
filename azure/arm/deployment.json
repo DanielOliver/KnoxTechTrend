@@ -65,7 +65,7 @@
                         },
                         {
                             "name": "WEBSITE_CONTENTSHARE",
-                            "value": "[toLower(parameters('storageName'))]"
+                            "value": "[toLower(parameters('functionAppName'))]"
                         },
                         {
                             "name": "AppInsights_InstrumentationKey",
