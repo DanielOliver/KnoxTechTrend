@@ -4,7 +4,7 @@
     "parameters": {
         "functionAppName": {
             "type": "string",
-            "defaultValue": "[concat('techtrendfunc', resourceGroup().name)]",
+            "defaultValue": "[concat('tchtrndfnc', resourceGroup().name)]",
             "maxLength": 15,
             "metadata": {
                 "description": "The name of the Azure Function App"
@@ -12,7 +12,7 @@
         },
         "storageName": {
             "type": "string",
-            "defaultValue": "[concat('funcstorage', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat('fncstrg', uniqueString(resourceGroup().id))]",
             "maxLength": 15,
             "metadata": {
                 "description": "The name of the Storage Account"
@@ -20,7 +20,7 @@
         },
         "insightName": {
             "type": "string",
-            "defaultValue": "[concat('funcinsight', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat('fncnsght', uniqueString(resourceGroup().id))]",
             "maxLength": 15,
             "metadata": {
                 "description": "The name of the App Insight Account"
