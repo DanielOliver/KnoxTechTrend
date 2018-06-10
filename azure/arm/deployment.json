@@ -96,14 +96,12 @@
             "name": "[parameters('insightName')]",
             "apiVersion": "2015-05-01",
             "location": "[resourceGroup().location]",
-            "tags": {},
-            "properties": {
-                "ApplicationId": "[parameters('insightName')]",
-                "Application_Type": "web",
-                "Flow_Type": null,
-                "Request_Source": "IbizaWebAppExtensionCreate"
+            "tags": {
+                "[concat('hidden-link:/subscriptions/', resourceGroup().id, '/resourceGroups/', parameters('functionAppName'), '/providers/Microsoft.Web/sites/', parameters('functionAppName'))]": "Resource"
             },
-            "dependsOn": []
+            "properties": {
+                "ApplicationId": "[parameters('insightName')]"
+            }
         },
         {
             "type": "Microsoft.Storage/storageAccounts",
