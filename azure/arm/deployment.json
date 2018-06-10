@@ -10,6 +10,14 @@
                 "description": "The name of the Azure Function App"
             }
         },
+        "hostingPlanName": {
+            "type": "string",
+            "defaultValue": "[concat('hp', uniqueString(subscription().subscriptionId))]",
+            "maxLength": 15,
+            "metadata": {
+                "description": "The name of the Hosting Plan"
+            }
+        },
         "storageName": {
             "type": "string",
             "defaultValue": "[concat('sg', uniqueString(subscription().subscriptionId))]",
@@ -36,8 +44,7 @@
             "apiVersion": "2015-08-01",
             "location": "[resourceGroup().location]",
             "properties": {
-                "name": "[parameters('functionAppName')]",
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('functionAppName'))]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]",
                 "siteConfig": {
                     "appSettings": [
                         {
@@ -69,23 +76,21 @@
                             "value": "6.5.0"
                         }
                     ]
-                },
-                "clientAffinityEnabled": false,
-                "reserved": false
+                }
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageName'))]",
                 "[resourceId('microsoft.insights/components', parameters('insightName'))]",
-                "[resourceId('Microsoft.Web/serverfarms', parameters('functionAppName'))]"
+                "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
             ]
         },
         {
             "type": "Microsoft.Web/serverfarms",
-            "apiVersion": "2015-08-01",
-            "name": "[parameters('functionAppName')]",
+            "apiVersion": "2015-04-01",
+            "name": "[parameters('hostingPlanName')]",
             "location": "[resourceGroup().location]",
             "properties": {
-                "name": "[parameters('functionAppName')]",
+                "name": "[parameters('hostingPlanName')]",
                 "computeMode": "Dynamic",
                 "sku": "Dynamic"
             }
