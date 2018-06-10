@@ -101,7 +101,7 @@
                 "ApplicationId": "[parameters('insightName')]",
                 "Application_Type": "web",
                 "Flow_Type": null,
-                "Request_Source": "IbizaWebAppExtensionCreate",
+                "Request_Source": "IbizaWebAppExtensionCreate"
             },
             "dependsOn": []
         },
