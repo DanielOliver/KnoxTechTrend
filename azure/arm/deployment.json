@@ -1,5 +1,5 @@
 {
-    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "functionAppName": {
@@ -25,19 +25,123 @@
             "metadata": {
                 "description": "The name of the App Insight Account"
             }
+        },
+        "serverFarmName": {
+            "type": "string",
+            "defaultValue": "[concat('sf', uniqueString(subscription().subscriptionId))]",
+            "maxLength": 15,
+            "metadata": {
+                "description": "The name of the Server Farm"
+            }
         }
     },
     "variables": {},
     "resources": [
         {
+            "type": "Microsoft.insights/components",
+            "kind": "web",
+            "name": "[parameters('insightName')]",
+            "apiVersion": "2015-05-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+            },
+            "scale": null,
+            "properties": {
+                "Application_Type": "web",
+                "Flow_Type": null,
+                "Request_Source": null,
+                "HockeyAppId": null,
+                "SamplingPercentage": null
+            },
+            "dependsOn": []
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "Storage",
+            "name": "[parameters('storageName')]",
+            "apiVersion": "2018-02-01",
+            "location": "[resourceGroup().location]",
+            "tags": {},
+            "scale": null,
+            "properties": {
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [],
+                    "ipRules": [],
+                    "defaultAction": "Allow"
+                },
+                "supportsHttpsTrafficOnly": false,
+                "encryption": {
+                    "services": {
+                        "file": {
+                            "enabled": true
+                        },
+                        "blob": {
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                }
+            },
+            "dependsOn": []
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "sku": {
+                "name": "Y1",
+                "tier": "Dynamic",
+                "size": "Y1",
+                "family": "Y",
+                "capacity": 0
+            },
+            "kind": "functionapp",
+            "name": "[parameters('serverFarmName')]",
+            "apiVersion": "2016-09-01",
+            "location": "East US",
+            "scale": null,
+            "properties": {
+                "name": "[parameters('serverFarmName')]",
+                "workerTierName": null,
+                "adminSiteName": null,
+                "hostingEnvironmentProfile": null,
+                "perSiteScaling": false,
+                "reserved": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0
+            },
+            "dependsOn": []
+        },
+        {
             "type": "Microsoft.Web/sites",
             "kind": "functionapp",
             "name": "[parameters('functionAppName')]",
-            "apiVersion": "2015-08-01",
+            "apiVersion": "2016-08-01",
             "location": "[resourceGroup().location]",
+            "scale": null,
             "properties": {
-                "name": "[parameters('functionAppName')]",
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('functionAppName'))]",
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "[concat(parameters('functionAppName'),'.azurewebsites.net')]",
+                        "sslState": "Disabled",
+                        "virtualIP": null,
+                        "thumbprint": null,
+                        "toUpdate": null,
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "[concat(parameters('functionAppName'),'.scm.azurewebsites.net')]",
+                        "sslState": "Disabled",
+                        "virtualIP": null,
+                        "thumbprint": null,
+                        "toUpdate": null,
+                        "hostType": "Repository"
+                    }
+                ],
                 "siteConfig": {
                     "appSettings": [
                         {
@@ -70,49 +174,23 @@
                         }
                     ]
                 },
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverFarmName'))]",
+                "reserved": false,
+                "siteConfig": null,
+                "scmSiteAlsoStopped": false,
+                "hostingEnvironmentProfile": null,
                 "clientAffinityEnabled": false,
-                "reserved": false
+                "clientCertEnabled": false,
+                "hostNamesDisabled": false,
+                "containerSize": 1536,
+                "dailyMemoryTimeQuota": 0,
+                "cloningInfo": null
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageName'))]",
-                "[resourceId('microsoft.insights/components', parameters('insightName'))]",
-                "[resourceId('Microsoft.Web/serverfarms', parameters('functionAppName'))]"
+                "[resourceId('Microsoft.Web/serverfarms', parameters('serverFarmName'))]",
+                "[resourceId('Microsoft.insights/components', parameters('insightName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageName'))]"
             ]
-        },
-        {
-            "type": "Microsoft.Web/serverfarms",
-            "apiVersion": "2015-04-01",
-            "name": "[parameters('functionAppName')]",
-            "location": "[resourceGroup().location]",
-            "properties": {
-                "name": "[parameters('functionAppName')]",
-                "computeMode": "Dynamic",
-                "sku": "Dynamic"
-            }
-        },
-        {
-            "type": "microsoft.insights/components",
-            "kind": "web",
-            "name": "[parameters('insightName')]",
-            "apiVersion": "2015-05-01",
-            "location": "[resourceGroup().location]",
-            "tags": {
-                "[concat('hidden-link:/subscriptions/', resourceGroup().id, '/resourceGroups/', parameters('functionAppName'), '/providers/Microsoft.Web/sites/', parameters('functionAppName'))]": "Resource"
-            },
-            "properties": {
-                "ApplicationId": "[parameters('insightName')]"
-            }
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts",
-            "name": "[parameters('storageName')]",
-            "kind": "Storage",
-            "apiVersion": "2016-12-01",
-            "location": "[resourceGroup().location]",
-            "sku": {
-                "name": "Standard_LRS"
-            }
         }
-    ],
-    "outputs": {}
+    ]
 }
