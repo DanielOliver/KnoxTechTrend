@@ -33,10 +33,11 @@
             "type": "Microsoft.Web/sites",
             "kind": "functionapp",
             "name": "[parameters('functionAppName')]",
-            "apiVersion": "2016-03-01",
+            "apiVersion": "2015-08-01",
             "location": "[resourceGroup().location]",
             "properties": {
                 "name": "[parameters('functionAppName')]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('functionAppName'))]",
                 "siteConfig": {
                     "appSettings": [
                         {
@@ -74,8 +75,20 @@
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageName'))]",
-                "[resourceId('microsoft.insights/components', parameters('insightName'))]"
+                "[resourceId('microsoft.insights/components', parameters('insightName'))]",
+                "[resourceId('Microsoft.Web/serverfarms', parameters('functionAppName'))]"
             ]
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2015-04-01",
+            "name": "[parameters('functionAppName')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "name": "[parameters('functionAppName')]",
+                "computeMode": "Dynamic",
+                "sku": "Dynamic"
+            }
         },
         {
             "type": "microsoft.insights/components",
@@ -98,7 +111,8 @@
         {
             "type": "Microsoft.Storage/storageAccounts",
             "name": "[parameters('storageName')]",
-            "apiVersion": "2015-05-01-preview",
+            "kind": "Storage",
+            "apiVersion": "2016-12-01",
             "location": "[resourceGroup().location]",
             "properties": {
                 "accountType": "Standard_LRS"
