@@ -302,7 +302,7 @@
                         },
                         {
                             "name": "AppInsights_InstrumentationKey",
-                            "value": "[reference(concat('microsoft.insights/components/', parameters('insightName'))).InstrumentationKey]"
+                            "value": "[reference(concat('microsoft.insights/components/', parameters('functionAppName'))).InstrumentationKey]"
                         },
                         {
                             "name": "WEBSITE_NODE_DEFAULT_VERSION",
