@@ -97,14 +97,11 @@
             "apiVersion": "2015-05-01",
             "location": "[resourceGroup().location]",
             "tags": {},
-            "scale": null,
             "properties": {
                 "ApplicationId": "[parameters('insightName')]",
                 "Application_Type": "web",
                 "Flow_Type": null,
                 "Request_Source": "IbizaWebAppExtensionCreate",
-                "HockeyAppId": null,
-                "SamplingPercentage": null
             },
             "dependsOn": []
         },
@@ -114,8 +111,8 @@
             "kind": "Storage",
             "apiVersion": "2016-12-01",
             "location": "[resourceGroup().location]",
-            "properties": {
-                "accountType": "Standard_LRS"
+            "sku": {
+                "name": "Standard_LRS"
             }
         }
     ],
