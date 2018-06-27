@@ -18,7 +18,7 @@ steps:
   displayName: Copy ARM parameters
   inputs:
     SourceFolder: 'azure/parameters'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)/parameters'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/arm_parameters'
     CleanTargetFolder: true
     OverWrite: true
     flattenFolders: true
