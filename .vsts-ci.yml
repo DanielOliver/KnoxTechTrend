@@ -9,7 +9,22 @@ steps:
     flattenFolders: true
 
 - task: PublishBuildArtifacts@1
-  displayName: Publish Artifacts
+  displayName: Publish ARM Artifacts
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)/arm'
     ArtifactName: arm
+    
+- task: CopyFiles@2
+  displayName: Copy ARM parameters
+  inputs:
+    SourceFolder: 'azure/parameters'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/parameters'
+    CleanTargetFolder: true
+    OverWrite: true
+    flattenFolders: true
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish ARM Parameter Artifacts
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/arm_parameters'
+    ArtifactName: arm_parameters
