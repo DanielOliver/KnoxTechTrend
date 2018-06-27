@@ -6,14 +6,7 @@ steps:
     TargetFolder: '$(Build.ArtifactStagingDirectory)/arm'
     CleanTargetFolder: true
     OverWrite: true
-    flattenFolders: true
 
-- task: PublishBuildArtifacts@1
-  displayName: Publish ARM Artifacts
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)/arm'
-    ArtifactName: arm
-    
 - task: CopyFiles@2
   displayName: Copy ARM parameters
   inputs:
@@ -21,10 +14,9 @@ steps:
     TargetFolder: '$(Build.ArtifactStagingDirectory)/arm_parameters'
     CleanTargetFolder: true
     OverWrite: true
-    flattenFolders: true
 
 - task: PublishBuildArtifacts@1
-  displayName: Publish ARM Parameter Artifacts
+  displayName: Publish Artifacts
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)/arm_parameters'
-    ArtifactName: arm_parameters
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: artifacts    
