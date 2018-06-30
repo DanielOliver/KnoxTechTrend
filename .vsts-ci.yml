@@ -1,0 +1,22 @@
+steps:
+- task: CopyFiles@2
+  displayName: Copy ARM template
+  inputs:
+    SourceFolder: 'azure/arm'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/arm'
+    CleanTargetFolder: true
+    OverWrite: true
+
+- task: CopyFiles@2
+  displayName: Copy ARM parameters
+  inputs:
+    SourceFolder: 'azure/parameters'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/arm_parameters'
+    CleanTargetFolder: true
+    OverWrite: true
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Artifacts
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: artifacts    
