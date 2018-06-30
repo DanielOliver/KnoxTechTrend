@@ -8,8 +8,15 @@ module.exports = function (context, meetupToRefresh) {
     request(meetupUrl, function (error, response, body) {        
         if (!error && response.statusCode == 200) {
             const items = JSON.parse(body);
-            console.log(items);
+            console.log(items);            
         }
+        const entGen = azure.TableUtilities.entityGenerator;
+        const updatedTask = {
+            PartitionKey: entGen.String(meetupToRefresh.area),
+            RowKey: entGen.String(meetupToRefresh.name),
+            LastQueriedUTC: entGen.DateTime(moment()),
+          };
+        tableSvc.mergeEntity('meetup', updatedTask, function(error, result, response){ if(!error) { }});
         context.done();
     })
 };
