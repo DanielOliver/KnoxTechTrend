@@ -1,0 +1,12 @@
+{
+  "disabled": false,
+  "bindings": [
+    {
+      "name": "meetupToAdd",
+      "type": "queueTrigger",
+      "direction": "in",
+      "queueName": "meetup-add-details",
+      "connection": ""
+    }
+  ]
+}
