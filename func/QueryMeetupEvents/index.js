@@ -20,9 +20,11 @@ module.exports = function (context, meetupToRefresh) {
 
                         MeetupDateLocal: entGen.String(`${element.local_date}T${element.local_time}:00.000`),
                         RsvpCount: entGen.Int32(element.yes_rsvp_count),
+                        WaitListCount: entGen.Int32(element.waitlist_count),
                         Status: entGen.String(element.status),
                         Link: entGen.String(element.link),
                         Description: entGen.String(element.description),
+
                         VenueName: entGen.String(element.venue.name),
                         VenueAddress1: entGen.String(element.venue.address_1),
                         VenueCity: entGen.String(element.venue.city),
