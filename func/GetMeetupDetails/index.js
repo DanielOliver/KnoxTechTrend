@@ -17,6 +17,7 @@ module.exports = function (context, meetupToAdd) {
                 State: entGen.String(item.state),
                 Country: entGen.String(item.country),
 
+                Timezone: entGen.String(item.timezone),
                 MembersCount: entGen.Int32(item.members),
                 FullName: entGen.String(item.name),
                 Link: entGen.String(item.link),
