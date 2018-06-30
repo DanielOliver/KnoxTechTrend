@@ -12,7 +12,7 @@
         },
         "hostingPlanName": {
             "type": "string",
-            "defaultValue": "[concat('hp', uniqueString(subscription().subscriptionId))]",
+            "defaultValue": "[concat('hp', uniqueString(resourceGroup().id))]",
             "maxLength": 15,
             "metadata": {
                 "description": "The name of the Hosting Plan"
@@ -20,7 +20,7 @@
         },
         "storageName": {
             "type": "string",
-            "defaultValue": "[concat('sg', uniqueString(subscription().subscriptionId))]",
+            "defaultValue": "[concat('sg', uniqueString(resourceGroup().id))]",
             "maxLength": 15,
             "metadata": {
                 "description": "The name of the Storage Account"
@@ -28,7 +28,7 @@
         },
         "insightName": {
             "type": "string",
-            "defaultValue": "[concat('in', uniqueString(subscription().subscriptionId))]",
+            "defaultValue": "[concat('in', uniqueString(resourceGroup().id))]",
             "maxLength": 15,
             "metadata": {
                 "description": "The name of the App Insight Account"
