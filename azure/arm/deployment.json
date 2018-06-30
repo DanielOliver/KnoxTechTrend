@@ -37,6 +37,10 @@
         "config_web_name": {
             "defaultValue": "web",
             "type": "String"
+        },
+        "meetup_api_key": {
+            "defaultValue": "",
+            "type": "String"
         }
     },
     "variables": {
@@ -207,6 +211,10 @@
                         "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageName')), '2015-05-01-preview').key1)]"
                     },
                     {
+                        "name": "AZURE_STORAGE_CONNECTION_STRING",
+                        "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageName')), '2015-05-01-preview').key1)]"
+                    },
+                    {
                         "name": "FUNCTIONS_EXTENSION_VERSION",
                         "value": "~1"
                     },
@@ -225,6 +233,10 @@
                     {
                         "name": "WEBSITE_NODE_DEFAULT_VERSION",
                         "value": "6.5.0"
+                    },
+                    {
+                        "name": "meetup_api_key",
+                        "value": "[parameters('meetup_api_key')]"
                     }
                 ],
                 "metadata": null,
