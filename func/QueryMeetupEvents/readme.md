@@ -1,11 +1,18 @@
-# QueueTrigger - JavaScript
+# QueryMeetupEvents
 
-The `QueueTrigger` makes it incredibly easy to react to new Queues inside of Azure Queue Storage. This sample demonstrates a simple use case of processing data from a given Queue using C#.
+Queries meetup for new past events.
 
-## How it works
-
-For a `QueueTrigger` to work, you provide a path which dictates where the queue messages are located inside your container.
-
-## Learn more
-
-<TODO> Documentation
+```json
+{
+  "disabled": false,
+  "bindings": [
+    {
+      "name": "meetupToRefresh",
+      "type": "queueTrigger",
+      "direction": "in",
+      "queueName": "meetup-refresh",
+      "connection": "AzureWebJobsStorage"
+    }
+  ]
+}
+```
