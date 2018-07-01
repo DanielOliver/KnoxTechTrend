@@ -26,14 +26,6 @@
                 "description": "The name of the Storage Account"
             }
         },
-        "insightName": {
-            "type": "string",
-            "defaultValue": "[concat('in', uniqueString(resourceGroup().id))]",
-            "maxLength": 15,
-            "metadata": {
-                "description": "The name of the App Insight Account"
-            }
-        },
         "config_web_name": {
             "defaultValue": "web",
             "type": "String"
@@ -167,7 +159,28 @@
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]",
+                "[resourceId('microsoft.insights/components', parameters('functionAppName'))]",
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageName'))]"
+            ],
+            "resources": [
+                {
+                  "apiVersion": "2016-03-01",
+                  "name": "appsettings",
+                  "type": "config",
+                  "dependsOn": [
+                    "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]"
+                  ],
+                  "properties": {
+                    "FUNCTIONS_EXTENSION_VERSION": "~1",
+                    "WEBSITE_CONTENTSHARE": "[toLower(parameters('functionAppName'))]",
+                    "WEBSITE_NODE_DEFAULT_VERSION": "6.5.0",
+                    "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageName')), '2015-05-01-preview').key1)]",
+                    "AZURE_STORAGE_CONNECTION_STRING": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageName')), '2015-05-01-preview').key1)]",
+                    "WEBSITE_NODE_DEFAULT_VERSION": "6.5.0",
+                    "meetup_api_key": "[parameters('meetup_api_key')]",
+                    "AppInsights_InstrumentationKey": "[reference(concat('microsoft.insights/components/', parameters('functionAppName'))).InstrumentationKey]"
+                  }
+                }
             ]
         },
         {
