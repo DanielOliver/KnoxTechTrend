@@ -24,6 +24,7 @@ module.exports = function (context, meetupToRefresh) {
                         Status: entGen.String(element.status),
                         Link: entGen.String(element.link),
                         Description: entGen.String(element.description),
+                        Name: entGen.String(element.name),
 
                         VenueName: entGen.String(element.venue.name),
                         VenueAddress1: entGen.String(element.venue.address_1),
