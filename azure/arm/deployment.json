@@ -178,7 +178,8 @@
                     "AZURE_STORAGE_CONNECTION_STRING": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageName')), '2015-05-01-preview').key1)]",
                     "WEBSITE_NODE_DEFAULT_VERSION": "6.5.0",
                     "meetup_api_key": "[parameters('meetup_api_key')]",
-                    "AppInsights_InstrumentationKey": "[reference(concat('microsoft.insights/components/', parameters('functionAppName'))).InstrumentationKey]"
+                    "AppInsights_InstrumentationKey": "[reference(concat('microsoft.insights/components/', parameters('functionAppName'))).InstrumentationKey]",
+                    "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageName')), '2015-05-01-preview').key1)]"
                   }
                 }
             ]
