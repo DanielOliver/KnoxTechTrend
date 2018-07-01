@@ -19,4 +19,29 @@ steps:
   displayName: Publish Artifacts
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: artifacts    
+    ArtifactName: artifacts
+
+- task: Npm@1
+  displayName: NPM install
+  inputs:
+    workingDir: func
+    verbose: false
+
+- task: CopyFiles@2
+  displayName: Copy Azure Function Files
+  inputs:
+    SourceFolder: func
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/functions'
+
+- task: ArchiveFiles@2
+  displayName: Archive $(Build.ArtifactStagingDirectory)/functions
+  inputs:
+    rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/functions'
+    includeRootFolder: false
+    archiveFile: '$(Build.ArtifactStagingDirectory)/functions.zip'
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Artifact Functions
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/functions.zip'
+    ArtifactName: functions
