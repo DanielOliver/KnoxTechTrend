@@ -9,19 +9,20 @@ module.exports = function (context, myTimer) {
     queueSvc.createQueueIfNotExists('meetup-refresh', function (error, result, response) { if (!error) { } });
     queueSvc.createQueueIfNotExists('meetup-add-details', function (error, result, response) { if (!error) { } });
 
-    const query = new azure.TableQuery().select(['PartitionKey', 'RowKey', 'LastQueriedUTC']);
+    const query = new azure.TableQuery().select(['PartitionKey', 'RowKey', 'LastQueriedUTC', 'LastEventsQueriedUTC']);
     tableSvc.queryEntities('meetup', query, null, function (error, result, response) {
         if (!error) {
             result.entries.forEach(value => {
                 var message = {
                     area: value.PartitionKey._,
                     name: value.RowKey._,
-                    LastQueriedUTC: ((value.LastQueriedUTC || { _: '2015-01-01T00:00:00.000' })._ || '2015-01-01T00:00:00.000')
+                    LastQueriedUTC: ((value.LastQueriedUTC || { _: '2015-01-01T00:00:00.000' })._ || '2015-01-01T00:00:00.000'),
+                    LastEventsQueriedUTC: ((value.LastEventsQueriedUTC || { _: '2015-01-01T00:00:00.000' })._ || '2015-01-01T00:00:00.000')
                 };
-                if (value.LastQueriedUTC == null || value.LastQueriedUTC._ == null || moment().subtract('60', 'day') >= moment(message.LastQueriedUTC)) {
+                if (moment().subtract('60', 'day') >= moment(message.LastQueriedUTC)) {
                     queueSvc.createMessage('meetup-add-details', JSON.stringify(message).trim(), function(error) { if (!error) {}});
                 }
-                if(moment().subtract('1', 'day') >= moment(message.LastQueriedUTC)) {
+                if(moment().subtract('1', 'day') >= moment(message.LastEventsQueriedUTC)) {
                     queueSvc.createMessage('meetup-refresh', JSON.stringify(message).trim(), function(error) { if (!error) {}});
                 }
             });

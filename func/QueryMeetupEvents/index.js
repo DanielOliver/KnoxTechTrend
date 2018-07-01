@@ -5,7 +5,7 @@ var request = require('request');
 module.exports = function (context, meetupToRefresh) {
     var tableSvc = azure.createTableService();
     tableSvc.createTableIfNotExists('events', function (error, result, response) { if (!error) { } });
-    var meetupUrl = `https://api.meetup.com/${meetupToRefresh.name}/events?key=${process.env.meetup_api_key}&sign=true&status=past&no_earlier_than=${moment(meetupToRefresh.LastQueriedUTC).format("YYYY-MM-DD")}T00:00:00`
+    var meetupUrl = `https://api.meetup.com/${meetupToRefresh.name}/events?key=${process.env.meetup_api_key}&sign=true&status=past&no_earlier_than=${moment(meetupToRefresh.LastEventsQueriedUTC).format("YYYY-MM-DD")}T00:00:00`
     request(meetupUrl, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             const items = JSON.parse(body);
@@ -42,7 +42,7 @@ module.exports = function (context, meetupToRefresh) {
         const updatedTask = {
             PartitionKey: entGen.String(meetupToRefresh.area),
             RowKey: entGen.String(meetupToRefresh.name),
-            LastQueriedUTC: entGen.DateTime(moment())
+            LastEventsQueriedUTC: entGen.DateTime(moment())
         };
         tableSvc.mergeEntity('meetup', updatedTask, function (error, result, response) { if (!error) { } });
         context.done();
