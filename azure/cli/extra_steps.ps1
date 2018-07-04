@@ -1,9 +1,17 @@
 param (
-    [Parameter(Mandatory=$true)][string]$ARMOutput
+    [Parameter()][string]$armOutput
     )
 
 #region Convert from json
-$json = $ARMOutput -replace "`"`"`"", ""
+$json = ""
+IF([string]::IsNullOrEmpty($armOutput)) {            
+    Write-Host "Using environment variable"
+    $json = $env:armOutput
+} else {
+    Write-Host "Using parameter"
+    $json = $armOutput
+}
+$json
 $json = $json | convertfrom-json
 #endregion
 
