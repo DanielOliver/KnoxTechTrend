@@ -354,5 +354,11 @@
                 "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]"
             ]
         }
-    ]
+    ],
+    "outputs": {
+        "storageName": {
+            "type": "string",
+            "value": "[parameters('storageName')]"
+        }
+    }
 }
