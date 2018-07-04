@@ -3,7 +3,8 @@ param (
     )
 
 #region Convert from json
-$json = $ARMOutput | convertfrom-json
+$json = $ARMOutput -replace "`"`"`"", ""
+$json = $json | convertfrom-json
 #endregion
 
 az storage table create --name meetup --account-name $json.storageAccountName.value
