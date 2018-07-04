@@ -6,6 +6,13 @@ steps:
     TargetFolder: '$(Build.ArtifactStagingDirectory)/arm'
     CleanTargetFolder: true
     OverWrite: true
+    
+- task: CopyFiles@2
+  displayName: Copy CLI powershell
+  inputs:
+    SourceFolder: 'azure/cli'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/arm'
+    OverWrite: true
 
 - task: CopyFiles@2
   displayName: Copy ARM parameters
