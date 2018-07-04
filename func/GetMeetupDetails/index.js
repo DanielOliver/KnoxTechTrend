@@ -25,6 +25,8 @@ module.exports = function (context, meetupToAdd) {
                 LastQueriedUTC: entGen.DateTime(moment())
             };
             tableSvc.mergeEntity('meetup', newTask, function (error, result, response) { if (!error) { } });
+        } else {
+            context.log('GetMeetupDetails Failed: ' + JSON.stringify(meetupToAdd));
         }
         context.done();
     })

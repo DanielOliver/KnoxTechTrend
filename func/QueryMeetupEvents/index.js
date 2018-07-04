@@ -37,6 +37,8 @@ module.exports = function (context, meetupToRefresh) {
                 });
                 tableSvc.executeBatch('events', batch, function (error, result, response) { if (!error) { } });
             }
+        } else {
+            context.log('QueryMeetupEvents Failed: ' + JSON.stringify(meetupToAdd));
         }
         const entGen = azure.TableUtilities.entityGenerator;
         const updatedTask = {
