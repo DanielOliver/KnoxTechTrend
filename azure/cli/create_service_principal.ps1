@@ -1,11 +1,14 @@
 param (
     [Parameter()][string]$displayName,
     [Parameter()][string]$password,
-    [Parameter()][string]$url
+    [Parameter()][string]$identifierUri
     )
 
-Add-Type -Assembly System.Web
-$securePassword = ConvertTo-SecureString -Force -AsPlainText -String $password
-$app = New-AzureRmADApplication –DisplayName $displayName –HomePage $url –IdentifierUris $url –Password $securePassword
-$principal = New-AzureRmADServicePrincipal –ApplicationId $app.ApplicationId
-$role = New-AzureRmRoleAssignment –RoleDefinitionName Contributor –ServicePrincipalName $app.ApplicationId
+$app = Get-AzureRmADApplication -IdentifierUri $identifierUri
+if(!$app) {
+    Add-Type -Assembly System.Web
+    $securePassword = ConvertTo-SecureString -Force -AsPlainText -String $password
+    $app = New-AzureRmADApplication –DisplayName "apiuser" –HomePage $identifierUri –IdentifierUris $identifierUri –Password $securePassword
+    New-AzureRmADServicePrincipal –ApplicationId $app.ApplicationId
+    New-AzureRmRoleAssignment –RoleDefinitionName Contributor –ServicePrincipalName $app.ApplicationId
+}
