@@ -13,10 +13,7 @@ $cred = New-Object -TypeName "System.Management.Automation.PSCredential" ($servi
 Connect-AzureRmAccount -Credential $cred -ServicePrincipal -TenantId $tenantID
 
 $deploymentName = ("CakeDeploy_" + $(get-date -f yyyy_MM_dd) + "_" + $(get-date -f HH_mm_ss))
-$parameters  = @{
-    "meetup_api_key"=$meetupApiKey
-}
-New-AzureRmResourceGroupDeployment -Mode Complete -Name $deploymentName -ResourceGroupName $resourceGroup -TemplateFile $templateFile -TemplateParameterFile $templateParameterFile -TemplateParameterObject $parameters
+New-AzureRmResourceGroupDeployment -Mode Complete -Name $deploymentName -ResourceGroupName $resourceGroup -TemplateFile $templateFile -TemplateParameterFile $templateParameterFile -Force -meetup_api_key $meetupApiKey 
 $outputs = (Get-AzureRmResourceGroupDeployment -ResourceGroupName $resourceGroup -Name $deploymentName).Outputs
 
 $storageName = $outputs.storageAccountName.value
