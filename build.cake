@@ -27,11 +27,13 @@ if(resourceGroupName == null) {
         resourceGroupName = "develop";
     }
 }
+
+var templateFile = "azure/arm/deployment.json";
 var parameterFileName = Argument("PARAMETER_FILE_NAME", EnvironmentVariable("PARAMETER_FILE_NAME"));
 if(parameterFileName == null && resourceGroupName != null) {
     parameterFileName = $"azure/parameters/{resourceGroupName}.json";
 }
-var shouldDeployAzure = !string.IsNullOrWhiteSpace(resourceGroupName) && !string.IsNullOrWhiteSpace(parameterFileName);
+var shouldDeployToAzure = !string.IsNullOrWhiteSpace(resourceGroupName) && !string.IsNullOrWhiteSpace(parameterFileName);
 
 //////////////////////////////////////////////////////////////////////
 // PREPARATION
@@ -39,6 +41,29 @@ var shouldDeployAzure = !string.IsNullOrWhiteSpace(resourceGroupName) && !string
 
 // Define directories.
 var buildDir = Directory("./build") + Directory(configuration);
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+// SETUP / TEARDOWN
+///////////////////////////////////////////////////////////////////////////////
+
+Setup(context => {
+    Information("Starting Setup...");
+
+    Information("Branch:        {0}", branch);
+    Information("TagName:       {0}", tagName);
+    Information("AzureRG:       {0}", resourceGroupName);
+    Information("TemplateFile:  {0}", templateFile);
+    Information("ParameterFile: {0}", parameterFileName);
+    Information("IsAzureDeploy: {0}", shouldDeployToAzure);
+    
+});
+
+Teardown(context => {
+    Information("Starting Teardown...");
+    Information("Finished running tasks.");
+});
 
 //////////////////////////////////////////////////////////////////////
 // TASKS
@@ -57,11 +82,12 @@ Task("Build")
 
 });
 
-
 Task("DeployTemplateToAzure")
-    .IsDependentOn("Build")
+    .WithCriteria(() => shouldDeployToAzure)
+    .IsDependentOn("Build")    
     .Does(() =>
 {
+    Information("Deploying to Azure...");
     StartPowershellFile("azure/cli/deploy.ps1", new PowershellSettings()
         .WithArguments(args =>
         {
@@ -71,8 +97,9 @@ Task("DeployTemplateToAzure")
                 .AppendSecret("meetupApiKey", meetupApiKey)
                 .Append("resourceGroup", resourceGroupName)
                 .Append("templateParameterFile", parameterFileName)
-                .Append("templateFile", "azure/arm/deployment.json");
+                .Append("templateFile", templateFile);
         }));
+    Information("Deployed to Azure");
 });
 
 //////////////////////////////////////////////////////////////////////
