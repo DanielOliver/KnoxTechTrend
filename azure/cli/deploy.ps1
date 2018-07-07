@@ -21,7 +21,7 @@ $outputs = (Get-AzureRmResourceGroupDeployment -ResourceGroupName $resourceGroup
 
 $storageName = $outputs.storageAccountName.value
 $storageContext = Get-AzureRmStorageAccount -StorageAccountName $storageName -ResourceGroupName $resourceGroup
-New-AzureStorageTable -Name "meetup" -Context $storageContext.Context
-New-AzureStorageTable -Name "events" -Context $storageContext.Context
-New-AzureStorageQueue -Name "meetup-refresh" -Context $storageContext.Context
-New-AzureStorageQueue -Name "meetup-add-details" -Context $storageContext.Context
+New-AzureStorageTable -Name "meetup" -Context $storageContext.Context -ErrorAction SilentlyContinue
+New-AzureStorageTable -Name "events" -Context $storageContext.Context -ErrorAction SilentlyContinue
+New-AzureStorageQueue -Name "meetup-refresh" -Context $storageContext.Context -ErrorAction SilentlyContinue
+New-AzureStorageQueue -Name "meetup-add-details" -Context $storageContext.Context -ErrorAction SilentlyContinue
