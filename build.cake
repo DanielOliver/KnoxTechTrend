@@ -107,7 +107,11 @@ Task("DeployTemplateToAzure")
                 .Append("templateFile", templateFile)
                 .Append("shouldDeploy", (shouldDeployToAzure ? "yes" : "no"));
         }));
-    Information("Deployed to Azure");
+    if(shouldDeployToAzure) {
+        Information("Deployed to Azure");
+    } else {
+        Information("Validated against Azure");
+    }
 });
 
 //////////////////////////////////////////////////////////////////////
