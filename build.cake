@@ -18,12 +18,19 @@ var isTagged = (EnvironmentVariable("APPVEYOR_REPO_TAG") ?? "").Contains("true")
 var tagName = EnvironmentVariable("APPVEYOR_REPO_TAG_NAME") ?? "";
 
 var resourceGroupName = Argument("RESOURCE_GROUP_NAME", EnvironmentVariable("RESOURCE_GROUP_NAME"));
+var isValidDeployment = false;
 if(resourceGroupName == null) {
     if(isMasterBranch && isTagged) {
         resourceGroupName = "production";
+        isValidDeployment = true;
     } else if (isMasterBranch) {
         resourceGroupName = "test";
+        isValidDeployment = true;
     } else if (isDevelopBranch) {
+        resourceGroupName = "develop";
+        isValidDeployment = true;
+    } else {
+        // This might as well be default for a while.
         resourceGroupName = "develop";
     }
 }
@@ -33,7 +40,8 @@ var parameterFileName = Argument("PARAMETER_FILE_NAME", EnvironmentVariable("PAR
 if(parameterFileName == null && resourceGroupName != null) {
     parameterFileName = $"azure/parameters/{resourceGroupName}.json";
 }
-var shouldDeployToAzure = !string.IsNullOrWhiteSpace(resourceGroupName) && !string.IsNullOrWhiteSpace(parameterFileName);
+var hasAzureParameters = !string.IsNullOrWhiteSpace(parameterFileName);
+var shouldDeployToAzure = isValidDeployment && !string.IsNullOrWhiteSpace(resourceGroupName) && hasAzureParameters;
 
 //////////////////////////////////////////////////////////////////////
 // PREPARATION
@@ -41,7 +49,6 @@ var shouldDeployToAzure = !string.IsNullOrWhiteSpace(resourceGroupName) && !stri
 
 // Define directories.
 var buildDir = Directory("./build") + Directory(configuration);
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -83,7 +90,7 @@ Task("Build")
 });
 
 Task("DeployTemplateToAzure")
-    .WithCriteria(() => shouldDeployToAzure)
+    .WithCriteria(() => hasAzureParameters)
     .IsDependentOn("Build")    
     .Does(() =>
 {
@@ -97,9 +104,14 @@ Task("DeployTemplateToAzure")
                 .AppendSecret("meetupApiKey", meetupApiKey)
                 .Append("resourceGroup", resourceGroupName)
                 .Append("templateParameterFile", parameterFileName)
-                .Append("templateFile", templateFile);
+                .Append("templateFile", templateFile)
+                .Append("shouldDeploy", (shouldDeployToAzure ? "yes" : "no"));
         }));
-    Information("Deployed to Azure");
+    if(shouldDeployToAzure) {
+        Information("Deployed to Azure");
+    } else {
+        Information("Validated against Azure");
+    }
 });
 
 //////////////////////////////////////////////////////////////////////
