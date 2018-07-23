@@ -1,6 +1,6 @@
 # Global settings applied to the whole site.
 [build]
-  base    = "jam"
+  base    = "jam/"
   publish = "public"
   command = "gatsby build"
 
