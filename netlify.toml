@@ -1,7 +1,7 @@
 # Global settings applied to the whole site.
 [build]
   base    = "jam/"
-  publish = "public"
+  publish = "jam/public/"
   command = "gatsby build"
 
 # Branch Deploy context: All deploys that are not in
