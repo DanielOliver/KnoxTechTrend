@@ -368,3 +368,5 @@ tools/**
 # Build results
 [Dd]ebug/
 [Rr]elease/
+
+temp/

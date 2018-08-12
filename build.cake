@@ -48,11 +48,13 @@ var shouldDeployToAzure = isValidDeployment && !string.IsNullOrWhiteSpace(resour
 
 
 
-string kuduTarget     = Argument("target", "Kudu-Publish-Documentation"),
-       kuduBaseUri    = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
-       kuduUserName   = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+string kuduUserName   = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
        kuduPassword   = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
 var functionsSourcePath = Directory("./func");
+
+
+var netlifyAccesToken = EnvironmentVariable("NETLIFY_ACCESS_TOKEN");
+var netlifyToml = "./netlify-" + resourceGroupName + ".toml";
 
 //////////////////////////////////////////////////////////////////////
 // PREPARATION
@@ -76,6 +78,7 @@ Setup(context => {
     Information("ParameterFile:      {0}", parameterFileName);
     Information("HasAzureParameters: {0}", hasAzureParameters);
     Information("IsAzureDeploy:      {0}", shouldDeployToAzure);
+    Information("NetlifyTOML:        {0}", netlifyToml);
     
 });
 
@@ -128,6 +131,23 @@ Task("npm-build")
     Information("Built JAMStack...");
 });
 
+Task("Deploy-Netlify")
+    .WithCriteria(() => hasAzureParameters && shouldDeployToAzure)
+    .IsDependentOn("npm-build")
+    .Does(() => 
+{
+    Information("Deploying to Netlify...");
+    
+    StartPowershellFile("azure/cli/deploy_jam.ps1", new PowershellSettings()
+        .WithArguments(args =>
+        {
+            args.AppendSecret("accessToken", netlifyAccesToken)
+                .Append("netlifyTomlFile", netlifyToml);
+        }));
+
+    Information("Deployed to Netlify...");
+});
+
 Task("DeployTemplateToAzure")
     .WithCriteria(() => hasAzureParameters)
     .IsDependentOn("Build")    
@@ -152,7 +172,6 @@ Task("DeployTemplateToAzure")
         Information("Validated Template against Azure");
     }
 });
-
 
 Task("DeployFunctionsToAzure")
     .WithCriteria(() => hasAzureParameters && shouldDeployToAzure & !string.IsNullOrWhiteSpace(kuduUserName) && !string.IsNullOrWhiteSpace(kuduPassword))
@@ -179,7 +198,7 @@ Task("DeployFunctionsToAzure")
 //////////////////////////////////////////////////////////////////////
 
 Task("Default")
-    .IsDependentOn("npm-build")
+    .IsDependentOn("Deploy-Netlify")
     .IsDependentOn("DeployFunctionsToAzure");
 
 //////////////////////////////////////////////////////////////////////

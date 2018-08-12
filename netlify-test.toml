@@ -1,0 +1,6 @@
+[Settings]
+ID = "ca952a2d-100e-49ac-816c-6c420bbe162b"
+
+[Build]
+  Publish = "jam/public/"
+  Functions = ""
