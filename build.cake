@@ -6,7 +6,7 @@
 // ARGUMENTS
 //////////////////////////////////////////////////////////////////////
 
-var target = Argument("target", "Default");
+var target = Argument("target", EnvironmentVariable("target") ?? "Default");
 var configuration = Argument("configuration", "Release");
 
 var meetupApiKey = Argument("MEETUP_API_KEY", EnvironmentVariable("MEETUP_API_KEY"));
@@ -71,6 +71,7 @@ var buildDir = Directory("./build") + Directory(configuration);
 Setup(context => {
     Information("Starting Setup...");
 
+    Information("Target:             {0}", target);
     Information("Branch:             {0}", branch);
     Information("TagName:            {0}", tagName);
     Information("AzureRG:            {0}", resourceGroupName);
