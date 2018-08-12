@@ -33,6 +33,10 @@ if($shouldDeploy -eq "yes") {
     New-AzureStorageTable -Name "events" -Context $storageContext.Context -ErrorAction SilentlyContinue
     New-AzureStorageQueue -Name "meetup-refresh" -Context $storageContext.Context -ErrorAction SilentlyContinue
     New-AzureStorageQueue -Name "meetup-add-details" -Context $storageContext.Context -ErrorAction SilentlyContinue
+
+    Write-Host "Write output name for Azure Functions Name"
+    New-Item -ItemType Directory "temp" -Force
+    $outputs.appServiceName.value | Out-File -FilePath "temp/appServiceName.tmp" -Encoding string -NoNewline
 } else {
     Write-Host "Testing Deployment Validation to Azure"
     Test-AzureRmResourceGroupDeployment -Mode Complete -ResourceGroupName $resourceGroup -TemplateFile $templateFile -TemplateParameterFile $templateParameterFile -meetup_api_key $meetupApiKey | Out-Null
