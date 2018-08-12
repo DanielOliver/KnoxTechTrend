@@ -1,5 +1,5 @@
 import React from 'react'
-// import { Link } from 'gatsby'
+import { Link } from 'gatsby'
 import { StaticQuery, graphql } from "gatsby"
 
 import Layout from '../components/layout'
@@ -36,7 +36,7 @@ const MeetupList = () => (
       <ul>
       {data.allMeetup.edges.map(x => (
         <li key={x.node.id}>
-          <a href={x.node.trendURL}>{x.node.FullName}</a>
+          <Link to={x.node.trendURL}>{x.node.FullName}</Link>
         </li>
         )
       )

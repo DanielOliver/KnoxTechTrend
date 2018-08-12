@@ -1,6 +1,7 @@
 import React from "react"
 import { graphql } from "gatsby"
 import Layout from '../components/layout'
+import { Link } from 'gatsby'
 
 class MeetupTemplate extends React.Component {
 
@@ -8,7 +9,7 @@ class MeetupTemplate extends React.Component {
         return (<ul>
             {events.edges.map(x =>
                 (<li key={x.node.RowKey}>
-                    <a href={x.node.trendURL}>{x.node.Name}</a>
+                    <Link to={x.node.trendURL}>{x.node.Name}</Link>
                     <p>{x.node.MeetupDateLocal}</p>
                 </li>)
             )

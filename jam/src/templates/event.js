@@ -1,6 +1,7 @@
 import React from "react"
 import { graphql } from "gatsby"
 import Layout from '../components/layout'
+import { Link } from 'gatsby'
 
 class EventTemplate extends React.Component {
     render() {
@@ -9,7 +10,7 @@ class EventTemplate extends React.Component {
         return (
             <Layout>
                 <div>
-                    <h1><a href={meetup.trendURL}>{meetup.FullName}</a></h1>
+                    <h1><Link to={meetup.trendURL}>{meetup.FullName}</Link></h1>
                     <h2>{event.Name}</h2>
                     <p>{event.MeetupDateLocal}</p>
                 </div>
