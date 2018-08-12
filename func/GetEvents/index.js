@@ -19,11 +19,11 @@ module.exports = function (context, myTimer) {
                     LastQueriedUTC: ((value.LastQueriedUTC || { _: '2015-01-01T00:00:00.000' })._ || '2015-01-01T00:00:00.000'),
                     LastEventsQueriedUTC: ((value.LastEventsQueriedUTC || { _: '2015-01-01T00:00:00.000' })._ || '2015-01-01T00:00:00.000')
                 };
-                if (moment().subtract('60', 'day') >= moment(message.LastQueriedUTC)) {
+                if (moment().subtract('30', 'day') >= moment(message.LastQueriedUTC)) {
                     context.log(`Refreshing meetup: ${value.RowKey._}.`);
                     queueSvc.createMessage('meetup-add-details', JSON.stringify(message).trim(), function(error) { if (!error) {}});
                 }
-                if(moment().subtract('1', 'day') >= moment(message.LastEventsQueriedUTC)) {
+                if(moment().subtract('10', 'hours') >= moment(message.LastEventsQueriedUTC)) {
                     context.log(`Refreshing events for meetup: ${value.RowKey._}.`);
                     queueSvc.createMessage('meetup-refresh', JSON.stringify(message).trim(), function(error) { if (!error) {}});
                 }

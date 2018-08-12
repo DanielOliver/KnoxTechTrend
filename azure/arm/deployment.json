@@ -359,6 +359,10 @@
         "storageAccountName": {
             "type": "string",
             "value": "[parameters('storageName')]"
+        },
+        "appServiceName": {
+            "type": "string",
+            "value": "[parameters('functionAppName')]"
         }
     }
 }

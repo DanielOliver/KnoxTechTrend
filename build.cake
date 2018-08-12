@@ -1,4 +1,7 @@
 #addin nuget:?package=Cake.Powershell&version=0.4.5
+#addin nuget:?package=Cake.Kudu.Client&version=0.5.0
+#addin nuget:?package=Cake.Npm&version=0.13.0
+
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
 //////////////////////////////////////////////////////////////////////
@@ -43,6 +46,16 @@ if(parameterFileName == null && resourceGroupName != null) {
 var hasAzureParameters = !string.IsNullOrWhiteSpace(parameterFileName);
 var shouldDeployToAzure = isValidDeployment && !string.IsNullOrWhiteSpace(resourceGroupName) && hasAzureParameters;
 
+
+
+string kuduUserName   = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+       kuduPassword   = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+var functionsSourcePath = Directory("./func");
+
+
+var netlifyAccesToken = EnvironmentVariable("NETLIFY_ACCESS_TOKEN");
+var netlifyToml = "./netlify-" + resourceGroupName + ".toml";
+
 //////////////////////////////////////////////////////////////////////
 // PREPARATION
 //////////////////////////////////////////////////////////////////////
@@ -58,12 +71,14 @@ var buildDir = Directory("./build") + Directory(configuration);
 Setup(context => {
     Information("Starting Setup...");
 
-    Information("Branch:        {0}", branch);
-    Information("TagName:       {0}", tagName);
-    Information("AzureRG:       {0}", resourceGroupName);
-    Information("TemplateFile:  {0}", templateFile);
-    Information("ParameterFile: {0}", parameterFileName);
-    Information("IsAzureDeploy: {0}", shouldDeployToAzure);
+    Information("Branch:             {0}", branch);
+    Information("TagName:            {0}", tagName);
+    Information("AzureRG:            {0}", resourceGroupName);
+    Information("TemplateFile:       {0}", templateFile);
+    Information("ParameterFile:      {0}", parameterFileName);
+    Information("HasAzureParameters: {0}", hasAzureParameters);
+    Information("IsAzureDeploy:      {0}", shouldDeployToAzure);
+    Information("NetlifyTOML:        {0}", netlifyToml);
     
 });
 
@@ -80,13 +95,57 @@ Task("Clean")
     .Does(() =>
 {
     CleanDirectory(buildDir);
+    CleanDirectory("temp");
 });
 
 Task("Build")
     .IsDependentOn("Clean")
     .Does(() =>
 {
+});
 
+Task("npm-install")
+    .IsDependentOn("clean")
+    .Does(() =>
+{
+    Information("Installing packages for JAMStack...");
+    NpmInstall(new NpmInstallSettings 
+    {
+        WorkingDirectory = "jam"
+    });
+    Information("Installed packages for JAMStack.");
+});
+
+Task("npm-build")
+    .IsDependentOn("npm-install")
+    .Does(() => 
+{
+    Information("Building JAMStack...");
+    var settings = 
+        new NpmRunScriptSettings 
+        {
+            ScriptName = "build",
+            WorkingDirectory = "jam"
+        };
+    NpmRunScript(settings);
+    Information("Built JAMStack...");
+});
+
+Task("Deploy-Netlify")
+    .WithCriteria(() => hasAzureParameters && shouldDeployToAzure)
+    .IsDependentOn("npm-build")
+    .Does(() => 
+{
+    Information("Deploying to Netlify...");
+    
+    StartPowershellFile("azure/cli/deploy_jam.ps1", new PowershellSettings()
+        .WithArguments(args =>
+        {
+            args.AppendSecret("accessToken", netlifyAccesToken)
+                .Append("netlifyTomlFile", netlifyToml);
+        }));
+
+    Information("Deployed to Netlify...");
 });
 
 Task("DeployTemplateToAzure")
@@ -94,7 +153,7 @@ Task("DeployTemplateToAzure")
     .IsDependentOn("Build")    
     .Does(() =>
 {
-    Information("Deploying to Azure...");
+    Information("Deploying Template to Azure...");
     StartPowershellFile("azure/cli/deploy.ps1", new PowershellSettings()
         .WithArguments(args =>
         {
@@ -108,10 +167,39 @@ Task("DeployTemplateToAzure")
                 .Append("shouldDeploy", (shouldDeployToAzure ? "yes" : "no"));
         }));
     if(shouldDeployToAzure) {
-        Information("Deployed to Azure");
+        Information("Deployed Template to Azure");
     } else {
-        Information("Validated against Azure");
+        Information("Validated Template against Azure");
     }
+});
+
+Task("DeployFunctionsToAzure")
+    .WithCriteria(() => hasAzureParameters && shouldDeployToAzure & !string.IsNullOrWhiteSpace(kuduUserName) && !string.IsNullOrWhiteSpace(kuduPassword))
+    .IsDependentOn("DeployTemplateToAzure")    
+    .Does(() =>
+{
+
+    Information("Installing packages for Azure Functions...");
+    NpmInstall(new NpmInstallSettings 
+    {
+        WorkingDirectory = "func"
+    });
+    Information("Installed packages for Azure Functions.");
+
+    Information("Deploying Functions to Azure...");
+    
+    var appServiceName = EnvironmentVariable("APP_SERVICE_NAME");
+    var appServiceNameUrl = "https://" + appServiceName + ".scm.azurewebsites.net";
+    Information("Deploying to: " + appServiceNameUrl);
+
+    IKuduClient kuduClient = KuduClient(
+        appServiceNameUrl,
+        kuduUserName,
+        kuduPassword);
+
+    kuduClient.ZipDeployDirectory(functionsSourcePath);
+
+    Information("Deployed Functions to Azure");
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -119,8 +207,8 @@ Task("DeployTemplateToAzure")
 //////////////////////////////////////////////////////////////////////
 
 Task("Default")
-    .IsDependentOn("DeployTemplateToAzure")
-    .IsDependentOn("Build");
+    .IsDependentOn("Deploy-Netlify")
+    .IsDependentOn("DeployFunctionsToAzure");
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION

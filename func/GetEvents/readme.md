@@ -10,7 +10,7 @@ Checks to see if Meetup Event has been updated recently. If not, enqueues reques
       "name": "myTimer",
       "type": "timerTrigger",
       "direction": "in",
-      "schedule": "0 */10 * * * *"
+      "schedule": "0 0 */8 * * *"
     }
   ]
 }

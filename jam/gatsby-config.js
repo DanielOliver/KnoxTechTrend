@@ -13,7 +13,7 @@ module.exports = {
                     },
                     {
                         name: "events",
-                        type: "eventTypeName"
+                        type: "meetupEvents"
                     }
                 ]
             },
