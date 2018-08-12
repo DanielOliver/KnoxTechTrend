@@ -178,6 +178,14 @@ Task("DeployFunctionsToAzure")
     .IsDependentOn("DeployTemplateToAzure")    
     .Does(() =>
 {
+
+    Information("Installing packages for Azure Functions...");
+    NpmInstall(new NpmInstallSettings 
+    {
+        WorkingDirectory = "func"
+    });
+    Information("Installed packages for Azure Functions.");
+
     Information("Deploying Functions to Azure...");
     
     var appServiceName = EnvironmentVariable("APP_SERVICE_NAME");
