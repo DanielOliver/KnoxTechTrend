@@ -5,6 +5,7 @@
   "author": "Daniel Oliver <danieloliversoftware@gmail.com>",
   "dependencies": {
     "gatsby": "next",
+    "gatsby-plugin-netlify": "^1.0.21",
     "gatsby-plugin-react-helmet": "next",
     "gatsby-source-azure-storage": "^0.2.1",
     "react": "^16.4.1",
