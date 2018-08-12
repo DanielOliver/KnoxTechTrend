@@ -25,6 +25,7 @@ const MeetupList = () => (
             Timezone
             Link
             id
+            trendURL
           }
         }
       }
@@ -35,7 +36,7 @@ const MeetupList = () => (
       <ul>
       {data.allMeetup.edges.map(x => (
         <li key={x.node.id}>
-          <a href={x.node.Link}>{x.node.FullName}</a>
+          <a href={x.node.trendURL}>{x.node.FullName}</a>
         </li>
         )
       )
