@@ -180,7 +180,8 @@ Task("DeployFunctionsToAzure")
 {
     Information("Deploying Functions to Azure...");
     
-    var appServiceNameUrl = "https://" + System.IO.File.ReadAllText("temp/appServiceName.tmp") + ".scm.azurewebsites.net";
+    var appServiceName = EnvironmentVariable("APP_SERVICE_NAME");
+    var appServiceNameUrl = "https://" + appServiceName + ".scm.azurewebsites.net";
     Information("Deploying to: " + appServiceNameUrl);
 
     IKuduClient kuduClient = KuduClient(
