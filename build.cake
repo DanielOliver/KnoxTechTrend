@@ -46,7 +46,7 @@ if(parameterFileName == null && resourceGroupName != null) {
 var hasAzureParameters = !string.IsNullOrWhiteSpace(parameterFileName);
 var shouldDeployToAzure = isValidDeployment && !string.IsNullOrWhiteSpace(resourceGroupName) && hasAzureParameters;
 
-
+var azureStorageConnectionString = EnvironmentVariable(resourceGroupName.ToUpper() + AZURE_STORAGE_CONNECTION_STRING);
 
 string kuduUserName   = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
        kuduPassword   = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
@@ -120,8 +120,15 @@ Task("npm-install")
 Task("npm-build")
     .IsDependentOn("npm-install")
     .Does(() => 
-{
+{    
     Information("Building JAMStack...");
+    
+    StartPowershellFile("azure/cli/set_azure_connection_string.ps1", new PowershellSettings()
+        .WithArguments(args =>
+        {
+            args.AppendSecret("connectionString", azureStorageConnectionString);
+        }));
+
     var settings = 
         new NpmRunScriptSettings 
         {
