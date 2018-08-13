@@ -19,12 +19,12 @@ class MeetupTemplate extends React.Component {
 
     render() {
         const meetup = this.props.data.meetup
-        const events = this.props.data.events
+        const events = this.props.data.events        
         return (
             <Layout>
                 <div>
                     <h1>{meetup.FullName}</h1>
-                    {this.renderEvents(events)}
+                    {events && this.renderEvents(events)}
                 </div>
             </Layout>
         )
