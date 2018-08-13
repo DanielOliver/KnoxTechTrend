@@ -48,7 +48,7 @@ exports.createPages = ({ actions, graphql }) => {
                 return Promise.reject(result.errors)
             }
 
-            result.data.allMeetup.edges.forEach(({ node }) => {
+            result.data.allMeetup.edges.filter(({node}) => node.FullName && node.FullName != "").forEach(({ node }) => {
                 createPage({
                     path: node.trendURL,
                     component: meetupTemplate,

@@ -6,7 +6,7 @@
 // ARGUMENTS
 //////////////////////////////////////////////////////////////////////
 
-var target = Argument("target", "Default");
+var target = Argument("target", EnvironmentVariable("target") ?? "Default");
 var configuration = Argument("configuration", "Release");
 
 var meetupApiKey = Argument("MEETUP_API_KEY", EnvironmentVariable("MEETUP_API_KEY"));
@@ -46,7 +46,7 @@ if(parameterFileName == null && resourceGroupName != null) {
 var hasAzureParameters = !string.IsNullOrWhiteSpace(parameterFileName);
 var shouldDeployToAzure = isValidDeployment && !string.IsNullOrWhiteSpace(resourceGroupName) && hasAzureParameters;
 
-
+var azureStorageConnectionString = EnvironmentVariable(resourceGroupName.ToUpper() + "AZURE_STORAGE_CONNECTION_STRING");
 
 string kuduUserName   = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
        kuduPassword   = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
@@ -71,6 +71,7 @@ var buildDir = Directory("./build") + Directory(configuration);
 Setup(context => {
     Information("Starting Setup...");
 
+    Information("Target:             {0}", target);
     Information("Branch:             {0}", branch);
     Information("TagName:            {0}", tagName);
     Information("AzureRG:            {0}", resourceGroupName);
@@ -119,8 +120,15 @@ Task("npm-install")
 Task("npm-build")
     .IsDependentOn("npm-install")
     .Does(() => 
-{
+{    
     Information("Building JAMStack...");
+    
+    StartPowershellFile("azure/cli/set_azure_connection_string.ps1", new PowershellSettings()
+        .WithArguments(args =>
+        {
+            args.AppendSecret("connectionString", azureStorageConnectionString);
+        }));
+
     var settings = 
         new NpmRunScriptSettings 
         {
