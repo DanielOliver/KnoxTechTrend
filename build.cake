@@ -46,7 +46,7 @@ if(parameterFileName == null && resourceGroupName != null) {
 var hasAzureParameters = !string.IsNullOrWhiteSpace(parameterFileName);
 var shouldDeployToAzure = isValidDeployment && !string.IsNullOrWhiteSpace(resourceGroupName) && hasAzureParameters;
 
-var azureStorageConnectionString = EnvironmentVariable(resourceGroupName.ToUpper() + AZURE_STORAGE_CONNECTION_STRING);
+var azureStorageConnectionString = EnvironmentVariable(resourceGroupName.ToUpper() + "AZURE_STORAGE_CONNECTION_STRING");
 
 string kuduUserName   = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
        kuduPassword   = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
