@@ -46,7 +46,7 @@ if(parameterFileName == null && resourceGroupName != null) {
 var hasAzureParameters = !string.IsNullOrWhiteSpace(parameterFileName);
 var shouldDeployToAzure = isValidDeployment && !string.IsNullOrWhiteSpace(resourceGroupName) && hasAzureParameters;
 
-var azureStorageConnectionString = EnvironmentVariable(resourceGroupName.ToUpper() + "AZURE_STORAGE_CONNECTION_STRING");
+var azureStorageConnectionString = EnvironmentVariable(resourceGroupName.ToUpper() + "_AZURE_STORAGE_CONNECTION_STRING");
 
 string kuduUserName   = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
        kuduPassword   = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
@@ -122,11 +122,11 @@ Task("npm-build")
     .Does(() => 
 {    
     Information("Building JAMStack...");
-    
+
     StartPowershellFile("azure/cli/set_azure_connection_string.ps1", new PowershellSettings()
         .WithArguments(args =>
         {
-            args.AppendSecret("connectionString", azureStorageConnectionString);
+            args.AppendQuotedSecret("connectionString", azureStorageConnectionString);
         }));
 
     var settings = 
@@ -149,7 +149,7 @@ Task("Deploy-Netlify")
     StartPowershellFile("azure/cli/deploy_jam.ps1", new PowershellSettings()
         .WithArguments(args =>
         {
-            args.AppendSecret("accessToken", netlifyAccesToken)
+            args.AppendQuotedSecret("accessToken", netlifyAccesToken)
                 .Append("netlifyTomlFile", netlifyToml);
         }));
 
@@ -165,10 +165,10 @@ Task("DeployTemplateToAzure")
     StartPowershellFile("azure/cli/deploy.ps1", new PowershellSettings()
         .WithArguments(args =>
         {
-            args.AppendSecret("tenantID", tenantID)
-                .AppendSecret("servicePrincipalName", servicePrincipalName)
-                .AppendSecret("servicePrincipalPassword", servicePrincipalPassword)
-                .AppendSecret("meetupApiKey", meetupApiKey)
+            args.AppendQuotedSecret("tenantID", tenantID)
+                .AppendQuotedSecret("servicePrincipalName", servicePrincipalName)
+                .AppendQuotedSecret("servicePrincipalPassword", servicePrincipalPassword)
+                .AppendQuotedSecret("meetupApiKey", meetupApiKey)
                 .Append("resourceGroup", resourceGroupName)
                 .Append("templateParameterFile", parameterFileName)
                 .Append("templateFile", templateFile)
