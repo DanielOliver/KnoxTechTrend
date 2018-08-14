@@ -19,6 +19,7 @@ var isMasterBranch = branch.ToUpper().Contains("MASTER");
 var isDevelopBranch = branch.ToUpper().Contains("DEVELOP");
 var isTagged = (EnvironmentVariable("APPVEYOR_REPO_TAG") ?? "").Contains("true");
 var tagName = EnvironmentVariable("APPVEYOR_REPO_TAG_NAME") ?? "";
+var isPullRequest = !string.IsNullOrWhiteSpace(EnvironmentVariable("APPVEYOR_PULL_REQUEST_NUMBER"));
 
 var resourceGroupName = Argument("RESOURCE_GROUP_NAME", EnvironmentVariable("RESOURCE_GROUP_NAME"));
 var isValidDeployment = false;
@@ -44,7 +45,7 @@ if(parameterFileName == null && resourceGroupName != null) {
     parameterFileName = $"azure/parameters/{resourceGroupName}.json";
 }
 var hasAzureParameters = !string.IsNullOrWhiteSpace(parameterFileName);
-var shouldDeployToAzure = isValidDeployment && !string.IsNullOrWhiteSpace(resourceGroupName) && hasAzureParameters;
+var shouldDeployToAzure = !isPullRequest && isValidDeployment && !string.IsNullOrWhiteSpace(resourceGroupName) && hasAzureParameters;
 
 var azureStorageConnectionString = EnvironmentVariable(resourceGroupName.ToUpper() + "_AZURE_STORAGE_CONNECTION_STRING");
 
@@ -140,7 +141,7 @@ Task("npm-build")
 });
 
 Task("Deploy-Netlify")
-    .WithCriteria(() => hasAzureParameters && shouldDeployToAzure)
+    .WithCriteria(() => hasAzureParameters)
     .IsDependentOn("npm-build")
     .Does(() => 
 {
@@ -150,7 +151,8 @@ Task("Deploy-Netlify")
         .WithArguments(args =>
         {
             args.AppendQuotedSecret("accessToken", netlifyAccesToken)
-                .Append("netlifyTomlFile", netlifyToml);
+                .Append("netlifyTomlFile", netlifyToml)
+                .Append("isDraft", (isPullRequest ? "yes" : "no"));
         }));
 
     Information("Deployed to Netlify...");

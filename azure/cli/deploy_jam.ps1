@@ -1,6 +1,7 @@
 param (
     [Parameter()][string]$accessToken,
-    [Parameter()][string]$netlifyTomlFile
+    [Parameter()][string]$netlifyTomlFile,
+    [Parameter()][string]$isDraft
 )
 
 $url = "https://github.com/netlify/netlifyctl/releases/download/v0.4.0/netlifyctl-windows-amd64-0.4.0.zip"
@@ -12,5 +13,5 @@ If( -Not (Test-Path -path $output)) {
     Expand-Archive -Path $output -DestinationPath "temp/netlifyctl"
 }
 Copy-Item -Path $netlifyTomlFile -Destination "netlify.toml"
-& "temp/netlifyctl/netlifyctl.exe" "-A" $accessToken "deploy" 
+& "temp/netlifyctl/netlifyctl.exe" "-A" $accessToken "deploy" $(If($isDraft -eq "yes") { "--draft" } else { "" })
 Remove-Item -Path "netlify.toml"
