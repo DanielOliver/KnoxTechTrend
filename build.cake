@@ -10,6 +10,7 @@ var target = Argument("target", EnvironmentVariable("target") ?? "Default");
 var configuration = Argument("configuration", "Release");
 
 var meetupApiKey = Argument("MEETUP_API_KEY", EnvironmentVariable("MEETUP_API_KEY"));
+var appveyorApiKey = Argument("APPVEYOR_API_KEY", EnvironmentVariable("APPVEYOR_API_KEY"));
 var tenantID = Argument("TENANT_ID", EnvironmentVariable("TENANT_ID"));
 var servicePrincipalName = Argument("SERVICE_PRINCIPAL_NAME", EnvironmentVariable("SERVICE_PRINCIPAL_NAME"));
 var servicePrincipalPassword = Argument("SERVICE_PRINCIPAL_PASSWORD", EnvironmentVariable("SERVICE_PRINCIPAL_PASSWORD"));
@@ -17,7 +18,7 @@ var servicePrincipalPassword = Argument("SERVICE_PRINCIPAL_PASSWORD", Environmen
 var branch = EnvironmentVariable("APPVEYOR_REPO_BRANCH") ?? "";
 var isMasterBranch = branch.ToUpper().Contains("MASTER");
 var isDevelopBranch = branch.ToUpper().Contains("DEVELOP");
-var isTagged = (EnvironmentVariable("APPVEYOR_REPO_TAG") ?? "").Contains("true");
+var isTagged = (EnvironmentVariable("APPVEYOR_REPO_TAG") ?? "").Contains("true") || (EnvironmentVariable("APPVEYOR_REPO_TAG_OVERRIDE") ?? "").Contains("true");
 var tagName = EnvironmentVariable("APPVEYOR_REPO_TAG_NAME") ?? "";
 var isPullRequest = !string.IsNullOrWhiteSpace(EnvironmentVariable("APPVEYOR_PULL_REQUEST_NUMBER"));
 
@@ -75,6 +76,7 @@ Setup(context => {
     Information("Target:             {0}", target);    
     Information("Branch:             {0}", branch);
     Information("TagName:            {0}", tagName);
+    Information("IsTagged:           {0}", isTagged.ToString());
     Information("IsPullRequest:      {0}", isPullRequest.ToString());
     Information("AzureRG:            {0}", resourceGroupName);
     Information("TemplateFile:       {0}", templateFile);
@@ -172,6 +174,7 @@ Task("DeployTemplateToAzure")
                 .AppendQuotedSecret("servicePrincipalName", servicePrincipalName)
                 .AppendQuotedSecret("servicePrincipalPassword", servicePrincipalPassword)
                 .AppendQuotedSecret("meetupApiKey", meetupApiKey)
+                .AppendQuotedSecret("appveyorApiKey", appveyorApiKey)
                 .Append("resourceGroup", resourceGroupName)
                 .Append("templateParameterFile", parameterFileName)
                 .Append("templateFile", templateFile)

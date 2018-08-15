@@ -6,6 +6,7 @@ param (
     [Parameter()][string]$templateFile = "../arm/deployment.json",
     [Parameter()][string]$templateParameterFile = "../parameters/develop.json",
     [Parameter()][string]$meetupApiKey = "",
+    [Parameter()][string]$appveyorApiKey = "",
     [Parameter()][string]$shouldDeploy = "no" # or yes
 )
 
@@ -40,5 +41,5 @@ if($shouldDeploy -eq "yes") {
     # Out-File -FilePath "./temp/appServiceName.tmp" -Encoding string -NoNewline -InputObject $($outputs.appServiceName.value) -Force
 } else {
     Write-Host "Testing Deployment Validation to Azure"
-    Test-AzureRmResourceGroupDeployment -Mode Complete -ResourceGroupName $resourceGroup -TemplateFile $templateFile -TemplateParameterFile $templateParameterFile -meetup_api_key $meetupApiKey | Out-Null
+    Test-AzureRmResourceGroupDeployment -Mode Complete -ResourceGroupName $resourceGroup -TemplateFile $templateFile -TemplateParameterFile $templateParameterFile -meetup_api_key $meetupApiKey -appveyor_api_key $appveyorApiKey | Out-Null
 }
