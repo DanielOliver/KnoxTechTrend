@@ -72,9 +72,10 @@ var buildDir = Directory("./build") + Directory(configuration);
 Setup(context => {
     Information("Starting Setup...");
 
-    Information("Target:             {0}", target);
+    Information("Target:             {0}", target);    
     Information("Branch:             {0}", branch);
     Information("TagName:            {0}", tagName);
+    Information("IsPullRequest:      {0}", isPullRequest.ToString());
     Information("AzureRG:            {0}", resourceGroupName);
     Information("TemplateFile:       {0}", templateFile);
     Information("ParameterFile:      {0}", parameterFileName);
