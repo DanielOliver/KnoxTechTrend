@@ -37,8 +37,6 @@ if($shouldDeploy -eq "yes") {
 
     Write-Host "Write output name for Azure Functions Name"
     $env:APP_SERVICE_NAME = $outputs.appServiceName.value
-    # New-Item -ItemType Directory "temp" -Force
-    # Out-File -FilePath "./temp/appServiceName.tmp" -Encoding string -NoNewline -InputObject $($outputs.appServiceName.value) -Force
 } else {
     Write-Host "Testing Deployment Validation to Azure"
     Test-AzureRmResourceGroupDeployment -Mode Complete -ResourceGroupName $resourceGroup -TemplateFile $templateFile -TemplateParameterFile $templateParameterFile -meetup_api_key $meetupApiKey -appveyor_api_key $appveyorApiKey | Out-Null

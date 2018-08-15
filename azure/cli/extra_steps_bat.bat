@@ -1,1 +1,0 @@
-powershell -File ./extra_steps.ps1
