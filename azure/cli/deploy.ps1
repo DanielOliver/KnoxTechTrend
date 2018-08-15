@@ -24,7 +24,7 @@ Write-Host "Deployment Name: $deploymentName"
 $ErrorActionPreference = "Stop"
 if($shouldDeploy -eq "yes") {
     Write-Host "Deploying Resources to Azure"
-    New-AzureRmResourceGroupDeployment -Mode Complete -Name $deploymentName -ResourceGroupName $resourceGroup -TemplateFile $templateFile -TemplateParameterFile $templateParameterFile -Force -meetup_api_key $meetupApiKey | Out-Null
+    New-AzureRmResourceGroupDeployment -Mode Complete -Name $deploymentName -ResourceGroupName $resourceGroup -TemplateFile $templateFile -TemplateParameterFile $templateParameterFile -Force -meetup_api_key $meetupApiKey -appveyor_api_key $appveyorApiKey | Out-Null
     $outputs = (Get-AzureRmResourceGroupDeployment -ResourceGroupName $resourceGroup -Name $deploymentName).Outputs
 
     Write-Host "Creating tables and queues in Azure Storage"
