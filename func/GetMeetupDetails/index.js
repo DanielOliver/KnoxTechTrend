@@ -1,6 +1,7 @@
 var azure = require('azure-storage');
 var moment = require('moment');
 var request = require('request');
+var moment_tz = require('moment-timezone');
 
 module.exports = function (context, meetupToAdd) {
     var tableSvc = azure.createTableService();
