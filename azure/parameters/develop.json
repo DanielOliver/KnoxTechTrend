@@ -4,6 +4,9 @@
     "parameters": {
         "functionAppName": {
             "value": "knxtechtrenddev"
+        },
+        "appveyor_branch": {
+            "value": "develop"
         }
     }
 }

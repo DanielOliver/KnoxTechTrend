@@ -6,6 +6,7 @@ param (
     [Parameter()][string]$templateFile = "../arm/deployment.json",
     [Parameter()][string]$templateParameterFile = "../parameters/develop.json",
     [Parameter()][string]$meetupApiKey = "",
+    [Parameter()][string]$appveyorApiKey = "",
     [Parameter()][string]$shouldDeploy = "no" # or yes
 )
 
@@ -23,7 +24,7 @@ Write-Host "Deployment Name: $deploymentName"
 $ErrorActionPreference = "Stop"
 if($shouldDeploy -eq "yes") {
     Write-Host "Deploying Resources to Azure"
-    New-AzureRmResourceGroupDeployment -Mode Complete -Name $deploymentName -ResourceGroupName $resourceGroup -TemplateFile $templateFile -TemplateParameterFile $templateParameterFile -Force -meetup_api_key $meetupApiKey | Out-Null
+    New-AzureRmResourceGroupDeployment -Mode Complete -Name $deploymentName -ResourceGroupName $resourceGroup -TemplateFile $templateFile -TemplateParameterFile $templateParameterFile -Force -meetup_api_key $meetupApiKey -appveyor_api_key $appveyorApiKey | Out-Null
     $outputs = (Get-AzureRmResourceGroupDeployment -ResourceGroupName $resourceGroup -Name $deploymentName).Outputs
 
     Write-Host "Creating tables and queues in Azure Storage"
@@ -40,5 +41,5 @@ if($shouldDeploy -eq "yes") {
     # Out-File -FilePath "./temp/appServiceName.tmp" -Encoding string -NoNewline -InputObject $($outputs.appServiceName.value) -Force
 } else {
     Write-Host "Testing Deployment Validation to Azure"
-    Test-AzureRmResourceGroupDeployment -Mode Complete -ResourceGroupName $resourceGroup -TemplateFile $templateFile -TemplateParameterFile $templateParameterFile -meetup_api_key $meetupApiKey | Out-Null
+    Test-AzureRmResourceGroupDeployment -Mode Complete -ResourceGroupName $resourceGroup -TemplateFile $templateFile -TemplateParameterFile $templateParameterFile -meetup_api_key $meetupApiKey -appveyor_api_key $appveyorApiKey | Out-Null
 }

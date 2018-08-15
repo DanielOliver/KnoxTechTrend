@@ -33,6 +33,18 @@
         "meetup_api_key": {
             "defaultValue": "",
             "type": "String"
+        },
+        "appveyor_api_key": {
+            "defaultValue": "",
+            "type": "String"
+        },
+        "appveyor_branch": {
+            "defaultValue": "",
+            "type": "String"
+        },
+        "appveyor_is_tagged": {
+            "defaultValue": "",
+            "type": "String"
         }
     },
     "variables": {
@@ -178,6 +190,9 @@
                     "AZURE_STORAGE_CONNECTION_STRING": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageName')), '2015-05-01-preview').key1)]",
                     "WEBSITE_NODE_DEFAULT_VERSION": "6.5.0",
                     "meetup_api_key": "[parameters('meetup_api_key')]",
+                    "appveyor_api_key": "[parameters('appveyor_api_key')]",
+                    "appveyor_is_tagged": "[parameters('appveyor_is_tagged')]",
+                    "appveyor_branch": "[parameters('appveyor_branch')]",
                     "AppInsights_InstrumentationKey": "[reference(concat('microsoft.insights/components/', parameters('functionAppName'))).InstrumentationKey]",
                     "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageName')), '2015-05-01-preview').key1)]"
                   }
@@ -252,6 +267,18 @@
                     {
                         "name": "meetup_api_key",
                         "value": "[parameters('meetup_api_key')]"
+                    },
+                    {
+                        "name": "appveyor_api_key",
+                        "value": "[parameters('appveyor_api_key')]"
+                    },
+                    {
+                        "name": "appveyor_is_tagged",
+                        "value": "[parameters('appveyor_is_tagged')]"
+                    },
+                    {
+                        "name": "appveyor_branch",
+                        "value": "[parameters('appveyor_branch')]"
                     }
                 ],
                 "metadata": null,

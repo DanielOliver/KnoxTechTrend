@@ -27,10 +27,10 @@ module.exports = function (context, meetupToRefresh) {
                         Description: entGen.String(element.description),
                         Name: entGen.String(element.name),
 
-                        VenueName: entGen.String(element.venue.name),
-                        VenueAddress1: entGen.String(element.venue.address_1),
-                        VenueCity: entGen.String(element.venue.city),
-                        VenueID: entGen.Int32(element.venue.id)
+                        VenueName: entGen.String((element.venue || { name: null }).name),
+                        VenueAddress1: entGen.String((element.venue || { address_1: null }).address_1),
+                        VenueCity: entGen.String((element.venue || { city: null }).city),
+                        VenueID: entGen.Int32((element.venue || { id: null }).id)
                     };
 
                     batch.insertOrMergeEntity(newTask);
