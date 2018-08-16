@@ -21,7 +21,7 @@ module.exports = function (context, meetupToRefresh) {
                         RowKey: entGen.String(element.id),
 
                         MeetupDateLocal: entGen.DateTime(`${element.local_date}T${element.local_time}:00.000`),
-                        MeetupDateUtc: entGen.DateTime(moment_tz().tz(element.local_date, meetupToRefresh.Timezone)),
+                        MeetupDateUtc: entGen.DateTime(moment_tz.tz(`${element.local_date}T${element.local_time}:00.000`, meetupToRefresh.Timezone).utc().toDate()),
                         RsvpCount: entGen.Int32(element.yes_rsvp_count),
                         RsvpLimit: entGen.Int32(element.rsvp_limit),
                         WaitListCount: entGen.Int32(element.waitlist_count),
@@ -49,7 +49,7 @@ module.exports = function (context, meetupToRefresh) {
                         VenueState: entGen.String((element.venue || { state: null }).state),
                         VenueZip: entGen.String((element.venue || { zip: null }).zip),
                         VenueCountry: entGen.String((element.venue || { country: null }).country),
-                        VenueID: entGen.Int32((element.venue || { id: null }).id)
+                        VenueID: entGen.Int32((element.venue || { id: null }).id),
                         VenueLongitude: entGen.String((element.venue || { lon: null }).lon),
                         VenueLatitude: entGen.Int32((element.venue || { lat: null }).lat)
                     };

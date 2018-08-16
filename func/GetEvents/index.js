@@ -15,17 +15,22 @@ module.exports = function (context, myTimer) {
         if (!error) {
             result.entries.forEach(value => {
 
-                var lastQueriedUtc = moment((value.LastQueriedUTC || { _: '2015-01-01T00:00:00.000' })._ || '2015-01-01T00:00:00.000').toDate();
-                var lastEventsQueriedUTC = moment((value.LastEventsQueriedUTC || { _: '2015-01-01T00:00:00.000' })._ || '2015-01-01T00:00:00.000').toDate();
-                                    
+                var lastQueriedUtc = moment.utc((value.LastQueriedUTC || { _: '2015-01-01T00:00:00.000' })._ || '2015-01-01T00:00:00.000').toDate();
+                var lastEventsQueriedUTC = moment.utc((value.LastEventsQueriedUTC || { _: '2015-01-01T00:00:00.000' })._ || '2015-01-01T00:00:00.000').toDate();
+
+                var timezone = (value.Timezone || { _: 'US/Eastern' })._ || 'US/Eastern';
+
+                var localMeetup = moment(lastQueriedUtc).utc().tz(timezone).format();
+                var localEvents = moment(lastEventsQueriedUTC).utc().tz(timezone).format();
+                
                 var message = {
                     area: value.PartitionKey._,
                     name: value.RowKey._,
                     LastQueriedUTC: lastQueriedUtc,
                     LastEventsQueriedUTC: lastEventsQueriedUTC,
-                    LastQueriedLocal: (value.Timezone != null ? moment_tz().utc(value.LastQueriedUTC).tz(value.Timezone).toDate() : lastQueriedUtc),
-                    LastEventsQueriedLocal: (value.Timezone != null ? moment_tz().utc(value.LastEventsQueriedUTC).tz(value.Timezone).toDate() : lastEventsQueriedUTC),
-                    Timezone: (value.Timezone || 'US/Eastern')
+                    LastQueriedLocal: localMeetup,
+                    LastEventsQueriedLocal: localEvents,
+                    Timezone: timezone
                 };
                 if (moment_tz().utc().subtract('30', 'day') >= moment(message.LastQueriedUTC)) {
                     context.log(`Refreshing meetup: ${value.RowKey._}.`);
