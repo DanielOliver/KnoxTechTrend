@@ -21,6 +21,9 @@ module.exports = function (context, myTimer) {
                 "APPVEYOR_REPO_TAG_OVERRIDE": process.env.appveyor_is_tagged
             }
         }
+    if(process.env.git_commit_id) {
+        body.commitId = process.env.git_commit_id
+    }
 
     // Set up the request
     var req = https.request(options, (res) => {

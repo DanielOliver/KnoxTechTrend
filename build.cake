@@ -21,6 +21,7 @@ var isDevelopBranch = branch.ToUpper().Contains("DEVELOP");
 var isTagged = (EnvironmentVariable("APPVEYOR_REPO_TAG") ?? "").Contains("true") || (EnvironmentVariable("APPVEYOR_REPO_TAG_OVERRIDE") ?? "").Contains("true");
 var tagName = EnvironmentVariable("APPVEYOR_REPO_TAG_NAME") ?? "";
 var isPullRequest = !string.IsNullOrWhiteSpace(EnvironmentVariable("APPVEYOR_PULL_REQUEST_NUMBER"));
+var gitCommitID = EnvironmentVariable("APPVEYOR_REPO_COMMIT") ?? "";
 
 var resourceGroupName = Argument("RESOURCE_GROUP_NAME", EnvironmentVariable("RESOURCE_GROUP_NAME"));
 var isValidDeployment = false;
@@ -179,6 +180,10 @@ Task("DeployTemplateToAzure")
                 .Append("templateParameterFile", parameterFileName)
                 .Append("templateFile", templateFile)
                 .Append("shouldDeploy", (shouldDeployToAzure ? "yes" : "no"));
+                
+            if(!String.IsNullOrWhiteSpace(gitCommitID)) {                
+                args.Append("gitCommitId", gitCommitID);
+            }
         }));
     if(shouldDeployToAzure) {
         Information("Deployed Template to Azure");
