@@ -134,13 +134,23 @@ Task("npm-build")
             args.AppendQuotedSecret("connectionString", azureStorageConnectionString);
         }));
 
-    var settings = 
-        new NpmRunScriptSettings 
-        {
-            ScriptName = "build",
-            WorkingDirectory = "jam"
-        };
-    NpmRunScript(settings);
+    void BuildJam() {
+        var settings = 
+            new NpmRunScriptSettings 
+            {
+                ScriptName = "build",
+                WorkingDirectory = "jam"
+            };
+        NpmRunScript(settings);
+    }
+    try {
+        BuildJam();
+    } catch {
+        Information("Trying to build with clean cache...");
+        CleanDirectory("jam/.cache");
+        BuildJam();
+    }
+
     Information("Built JAMStack...");
 });
 
