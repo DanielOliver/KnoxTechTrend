@@ -386,3 +386,4 @@ tools/
 nupkg/
 build/
 .nugetapikey
+netlify.toml
