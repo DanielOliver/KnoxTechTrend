@@ -45,6 +45,10 @@
         "appveyor_is_tagged": {
             "defaultValue": "",
             "type": "String"
+        },
+        "git_commit_id": {
+            "defaultValue": "",
+            "type": "String"
         }
     },
     "variables": {
@@ -193,6 +197,7 @@
                     "appveyor_api_key": "[parameters('appveyor_api_key')]",
                     "appveyor_is_tagged": "[parameters('appveyor_is_tagged')]",
                     "appveyor_branch": "[parameters('appveyor_branch')]",
+                    "git_commit_id": "[parameters('git_commit_id')]",
                     "AppInsights_InstrumentationKey": "[reference(concat('microsoft.insights/components/', parameters('functionAppName'))).InstrumentationKey]",
                     "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageName')), '2015-05-01-preview').key1)]"
                   }
@@ -279,6 +284,10 @@
                     {
                         "name": "appveyor_branch",
                         "value": "[parameters('appveyor_branch')]"
+                    },
+                    {
+                        "name": "git_commit_id",
+                        "value": "[parameters('git_commit_id')]"
                     }
                 ],
                 "metadata": null,

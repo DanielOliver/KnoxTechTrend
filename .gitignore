@@ -370,3 +370,20 @@ tools/**
 [Rr]elease/
 
 temp/
+# Paket dependency manager
+.paket/paket.exe
+paket-files/
+
+# FAKE - F# Make
+.fake/
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# Cake and build stuff
+tools/
+nupkg/
+build/
+.nugetapikey
+netlify.toml

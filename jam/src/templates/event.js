@@ -23,16 +23,19 @@ export default EventTemplate
 
 export const pageQuery = graphql`
     query($meetupName: String!, $eventID: String!) {
-        meetup(UrlName: { eq: $meetupName }) {
-            FullName
+                    meetup(UrlName: {eq: $meetupName }) {
+                    FullName
             UrlName
-            trendURL
-        }
-        event: meetupEvents(RowKey: { eq: $eventID }) {
-            Name
+                trendURL
+            }
+        event: meetupEvents(RowKey: {eq: $eventID }) {
+                    Name
             RowKey
-            MeetupDateLocal(formatString: "MMMM DD, YYYY")
-            Link
+                MeetupDateLocal(formatString: "MMMM DD, YYYY")
+                Link
+                VenueLongitude
+                VenueLatitude
+                VenueName
+            }
         }
-    }
 `
