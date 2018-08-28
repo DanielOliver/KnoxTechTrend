@@ -16,7 +16,7 @@ module.exports = function (context, myTimer) {
             result.entries.forEach(value => {
 
                 var lastQueriedUtc = moment.utc((value.LastQueriedUTC || { _: '2015-01-01T00:00:00.000' })._ || '2015-01-01T00:00:00.000').toDate();
-                var lastEventsQueriedUTC = moment.utc((value.LastEventsQueriedUTC || { _: '2015-01-01T00:00:00.000' })._ || '2015-01-01T00:00:00.000').toDate();
+                var lastEventsQueriedUTC = moment.utc((value.LastEventsQueriedUTC || { _: '2015-01-01T00:00:00.000' })._ || '2015-01-01T00:00:00.000').subtract(1, "days").toDate();
 
                 var timezone = (value.Timezone || { _: 'US/Eastern' })._ || 'US/Eastern';
 
@@ -36,7 +36,7 @@ module.exports = function (context, myTimer) {
                     context.log(`Refreshing meetup: ${value.RowKey._}.`);
                     queueSvc.createMessage('meetup-add-details', JSON.stringify(message).trim(), function (error) { if (!error) { } });
                 }
-                if (moment_tz().utc().subtract('10', 'hours') >= moment(message.LastEventsQueriedUTC)) {
+                if (moment_tz().utc().subtract('1', 'day') >= moment(message.LastEventsQueriedUTC)) {
                     context.log(`Refreshing events for meetup: ${value.RowKey._}.`);
                     queueSvc.createMessage('meetup-refresh', JSON.stringify(message).trim(), function (error) { if (!error) { } });
                 }
