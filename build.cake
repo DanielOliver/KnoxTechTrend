@@ -173,7 +173,7 @@ Task("Deploy-Netlify")
 });
 
 Task("DeployTemplateToAzure")
-    .WithCriteria(() => hasAzureParameters)
+    .WithCriteria(() => hasAzureParameters && shouldDeployToAzure)
     .IsDependentOn("Build")    
     .Does(() =>
 {
