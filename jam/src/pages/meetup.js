@@ -19,7 +19,7 @@ const MeetupTable = ({ rows }) => {
         </TableRow>
       </TableHead>
       <TableBody>
-        {rows.map(x => {
+        {rows.filter(x => x.node.FullName).map(x => {
           const row = x.node;
           return (
             <TableRow key={row.id}>
