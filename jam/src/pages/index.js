@@ -2,7 +2,7 @@ import React from 'react'
 import { withStyles } from '@material-ui/core/styles';
 import Layout from '../components/layout'
 import Grid from '@material-ui/core/Grid';
-import { Paper } from '@material-ui/core';
+import { Paper, Typography } from '@material-ui/core';
 import MeetupMonthGraph from '../components/MeetupMonthGraph';
 
 const styles = theme => ({
@@ -25,7 +25,9 @@ const IndexPage = (props) => {
         <Grid container>
           <Grid item xs={12} className={classes.grid}>
             <Paper className={classes.paper}>
-              <h3>Monthly Meetup count</h3>
+              <Typography variant="display1" color="inherit" noWrap>
+                Monthly Meetup Count
+              </Typography>
               <MeetupMonthGraph />
             </Paper>
           </Grid>
