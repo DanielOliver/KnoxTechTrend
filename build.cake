@@ -166,14 +166,14 @@ Task("Deploy-Netlify")
         {
             args.AppendQuotedSecret("accessToken", netlifyAccesToken)
                 .Append("netlifyTomlFile", netlifyToml)
-                .Append("isDraft", (isPullRequest ? "yes" : "no"));
+                .Append("isDraft", ((isPullRequest || (!isMasterBranch && !isDevelopBranch)) ? "yes" : "no"));
         }));
 
     Information("Deployed to Netlify...");
 });
 
 Task("DeployTemplateToAzure")
-    .WithCriteria(() => hasAzureParameters)
+    .WithCriteria(() => hasAzureParameters && shouldDeployToAzure)
     .IsDependentOn("Build")    
     .Does(() =>
 {
