@@ -4,12 +4,16 @@
   "version": "0.0.1",
   "author": "Daniel Oliver <danieloliversoftware@gmail.com>",
   "dependencies": {
+    "@material-ui/core": "^3.0.1",
+    "@material-ui/icons": "^3.0.1",
     "gatsby": "2.0.0-rc.0",
     "gatsby-plugin-react-helmet": "3.0.0-rc.0",
     "gatsby-source-azure-storage": "^0.2.1",
+    "jss": "^9.8.7",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-helmet": "^5.2.0",
+    "react-jss": "^8.6.1",
     "react-vis": "^1.10.6"
   },
   "keywords": [

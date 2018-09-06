@@ -1,10 +1,10 @@
 import React from 'react'
-import { Link } from 'gatsby'
 import { StaticQuery, graphql } from "gatsby"
-
 import Layout from '../components/layout'
+import EventTable from '../components/EventTable';
 
-const EventList = () => (  
+
+const EventList = () => (
   <StaticQuery
     query={graphql`
     query eventsFrontPage {
@@ -17,31 +17,27 @@ const EventList = () => (
                     Link
                     trendURL
                     MeetupName: PartitionKey
+                    id
+                    RsvpCount
+                    VenueName
                 }
             }
         }
     }
     
     `}
-    render={data => (<ul>
-      {data.events.edges.map(x =>
-          (<li key={x.node.RowKey}>
-              <p>{x.node.MeetupName}
-              
-              <Link to={x.node.trendURL}>{x.node.Name}</Link>
-              
-              {x.node.MeetupDateLocal}</p>
-          </li>)
-      )
-      }
-  </ul>)}
+    render={data => (
+      <EventTable
+        includeMeetup={true}
+        rows={data.events.edges} />)
+    }
   />
 )
 
 const EventPage = () => (
   <Layout>
     <div>
-      <EventList/>
+      <EventList />
     </div>
   </Layout>
 )

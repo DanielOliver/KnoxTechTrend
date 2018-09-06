@@ -1,25 +1,21 @@
 import React from "react"
 import { graphql } from "gatsby"
 import Layout from '../components/layout'
-import { Link } from 'gatsby'
+import EventTable from "../components/EventTable";
 
 class MeetupTemplate extends React.Component {
 
     renderEvents(events) {        
-        return (<ul>
-            {events.edges.map(x =>
-                (<li key={x.node.RowKey}>
-                    <Link to={x.node.trendURL}>{x.node.Name}</Link>
-                    <p>{x.node.MeetupDateLocal}</p>
-                </li>)
-            )
-            }
-        </ul>)
+        return (
+            <EventTable
+                rows={events}
+                />
+        )
     }
 
     render() {
         const meetup = this.props.data.meetup
-        const events = this.props.data.events        
+        const events = this.props.data.events.edges        
         return (
             <Layout>
                 <div>
@@ -47,6 +43,9 @@ export const pageQuery = graphql`
                     MeetupDateLocal(formatString: "MMMM DD, YYYY")
                     Link
                     trendURL
+                    RsvpCount
+                    VenueName
+                    id
                 }
             }
         }
