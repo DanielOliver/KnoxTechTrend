@@ -26,10 +26,10 @@ var gitCommitID = EnvironmentVariable("APPVEYOR_REPO_COMMIT") ?? "";
 var resourceGroupName = Argument("RESOURCE_GROUP_NAME", EnvironmentVariable("RESOURCE_GROUP_NAME"));
 var isValidDeployment = false;
 if(resourceGroupName == null) {
-    if(isMasterBranch && isTagged) {
+    if((isMasterBranch && isTagged) || (isMasterBranch && isPullRequest)) {
         resourceGroupName = "production";
         isValidDeployment = true;
-    } else if (isMasterBranch) {
+    } else if (isMasterBranch || (isDevelopBranch && isPullRequest)) {
         resourceGroupName = "test";
         isValidDeployment = true;
     } else if (isDevelopBranch) {
