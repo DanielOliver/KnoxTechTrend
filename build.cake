@@ -26,7 +26,7 @@ var gitCommitID = EnvironmentVariable("APPVEYOR_REPO_COMMIT") ?? "";
 var resourceGroupName = Argument("RESOURCE_GROUP_NAME", EnvironmentVariable("RESOURCE_GROUP_NAME"));
 var isValidDeployment = false;
 if(resourceGroupName == null) {
-    if(isMasterBranch && isTagged) {
+    if((isMasterBranch && isTagged)) {
         resourceGroupName = "production";
         isValidDeployment = true;
     } else if (isMasterBranch) {
