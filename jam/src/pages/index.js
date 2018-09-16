@@ -22,50 +22,51 @@ const styles = theme => ({
 const IndexPage = (props) => {
   const { classes } = props;
   return (
-    <Layout>
-      <div className={classes.root}>
-        <Grid container>
-          <Grid item xs={12} className={classes.grid}>
-            <Paper className={classes.paper}>
-              <Typography variant="display1" color="inherit" noWrap>
-                Monthly Meetup Count
-              </Typography>
-              <StaticQuery
-                query={graphql`
-      query meetupDateList {
-        allMeetupEvents(sort: {fields: [MeetupDateLocal], order: ASC}) {
-          edges {
-            node {
-              MeetupDay: MeetupDateLocal(formatString: "MMMM DD, YYYY")
-              MeetupMonth: MeetupDateLocal(formatString: "MMMM 1, YYYY")
-              SortOrder: MeetupDateLocal(formatString: "YYYY-MM")
-              Day: MeetupDateLocal(formatString: "YYYY-MM-dd")
-              UtcTime: MeetupDateUtc
-            }
-          }
-        }
-      }
-      `}
-                render={data => {
-                  return (
+    <StaticQuery
+      query={graphql`
+query meetupDateList {
+allMeetupEvents(sort: {fields: [MeetupDateLocal], order: ASC}) {
+edges {
+  node {
+    MeetupDay: MeetupDateLocal(formatString: "MMMM DD, YYYY")
+    MeetupMonth: MeetupDateLocal(formatString: "MMMM 1, YYYY")
+    SortOrder: MeetupDateLocal(formatString: "YYYY-MM")
+    Day: MeetupDateLocal(formatString: "YYYY-MM-dd")
+    UtcTime: MeetupDateUtc
+    MeetupDayOfWeek: MeetupDateLocal(formatString: "dddd")
+  }
+}
+}
+}
+`}
+      render={data => {
+        return (
+          <Layout>
+            <div className={classes.root}>
+              <Grid container>
+                <Grid item xs={12} className={classes.grid}>
+                  <Paper className={classes.paper}>
+                    <Typography variant="display1" color="inherit" noWrap>
+                      Monthly Meetup Count (past year)
+                    </Typography>
                     <MeetupMonthGraph meetupEvents={data.allMeetupEvents.edges} />
-                  )
-                }
-                }
-              />
-            </Paper>
-          </Grid>
-          <Grid item xs={12} className={classes.grid}>
-            <Paper className={classes.paper}>
-              <Typography variant="display1" color="inherit" noWrap>
-                Meetups Per Day of Week
-              </Typography>
-              <MeetupWeekdayGraph />
-            </Paper>
-          </Grid>
-        </Grid>
-      </div>
-    </Layout>
+                  </Paper>
+                </Grid>
+                <Grid item xs={12} className={classes.grid}>
+                  <Paper className={classes.paper}>
+                    <Typography variant="display1" color="inherit" noWrap>
+                      Meetups Per Day of Week (past year)
+                    </Typography>
+                    <MeetupWeekdayGraph meetupEvents={data.allMeetupEvents.edges} />
+                  </Paper>
+                </Grid>
+              </Grid>
+            </div>
+          </Layout>
+        )
+      }
+      }
+    />
   )
 }
 

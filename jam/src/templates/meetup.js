@@ -7,6 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import MeetupMonthGraph from '../components/MeetupMonthGraph';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
+import MeetupWeekdayGraph from "../components/MeetupWeekdayGraph";
 
 const styles = theme => ({
     root: {
@@ -19,40 +20,49 @@ const styles = theme => ({
     },
 });
 
-const MeetupTemplate = (props) => {
-    const { classes } = props;
-    const meetup = props.data.meetup
-    const events = props.data.events.edges
-    return (
-        <Layout>
-            <Typography variant="display2" color="inherit" noWrap>
-                {meetup.FullName}
-            </Typography>
-            <div className={classes.root}>
-                <Grid container>
-                    <Grid item xs={12} className={classes.grid}>
-                        <Paper className={classes.paper}>
-                            <Typography variant="display1" color="inherit" noWrap>
-                                Events
-                            </Typography>
-                            <EventTable rows={events} />
-                        </Paper>
-                    </Grid>
-                    <Grid item xs={12} className={classes.grid}>
-                        <Paper className={classes.paper}>
-                            <Typography variant="display1" color="inherit" noWrap>
-                                Monthly Meetup Count
-                            </Typography>
-                            <MeetupMonthGraph meetupEvents={events} />
-                        </Paper>
-                    </Grid>
-                </Grid>
-            </div>
-        </Layout>
-    )
-}
+class MeetupTemplate extends React.Component {
 
-export default withStyles(styles, { withTheme: true })(MeetupTemplate)
+    render() {
+        const { classes } = this.props;
+        const meetup = this.props.data.meetup
+        const events = this.props.data.events.edges
+        return (
+            <Layout>
+                <Typography variant="display2" color="inherit" noWrap>
+                    {meetup.FullName}
+                </Typography>
+                <div className={classes.root}>
+                    <Grid container>
+                        <Grid item xs={12} className={classes.grid}>
+                            <Paper className={classes.paper}>
+                                <Typography variant="display1" color="inherit" noWrap>
+                                    Events
+                            </Typography>
+                                <EventTable rows={events} />
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={12} className={classes.grid}>
+                            <Paper className={classes.paper}>
+                                <Typography variant="display1" color="inherit" noWrap>
+                                    Monthly Meetup Count (past year)
+                                </Typography>
+                                <MeetupMonthGraph meetupEvents={events} />
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={12} className={classes.grid}>
+                            <Paper className={classes.paper}>
+                                <Typography variant="display1" color="inherit" noWrap>
+                                    Meetups Per Day of Week (past year)
+                                </Typography>
+                                <MeetupWeekdayGraph meetupEvents={events} />
+                            </Paper>
+                        </Grid>
+                    </Grid>
+                </div>
+            </Layout>
+        )
+    }
+}
 
 export const pageQuery = graphql`
     query($meetupName: String!) {
@@ -78,8 +88,11 @@ export const pageQuery = graphql`
                     SortOrder: MeetupDateLocal(formatString: "YYYY-MM")
                     Day: MeetupDateLocal(formatString: "YYYY-MM-dd")
                     UtcTime: MeetupDateUtc
+                    MeetupDayOfWeek: MeetupDateLocal(formatString: "dddd")
                 }
             }
         }
     }
 `
+
+export default withStyles(styles, { withTheme: true })(MeetupTemplate)
