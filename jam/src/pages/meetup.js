@@ -7,7 +7,19 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    padding: theme.spacing.unit * 1.2,
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  },
+});
 
 const MeetupTable = ({ rows }) => {
   return (
@@ -68,12 +80,19 @@ const MeetupList = () => (
   />
 )
 
-const MeetupPage = () => (
-  <Layout>
-    <div>
-      <MeetupList />
-    </div>
-  </Layout>
-)
+const MeetupPage = (props) => {
+  const { classes } = props;
+  return (
+    <Layout>
+      <div className={classes.root}>
+        <Grid container>
+          <Grid item xs={12} className={classes.grid}>
+            <MeetupList />
+          </Grid>
+        </Grid>
+      </div>
+    </Layout>
+  )
+}
 
-export default MeetupPage
+export default withStyles(styles, { withTheme: true })(MeetupPage)

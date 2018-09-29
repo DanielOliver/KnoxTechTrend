@@ -116,6 +116,12 @@ class EventTable extends React.Component {
         const { rows, includeMeetup } = this.props;
         const { rowsPerPage, page } = this.state;
 
+        if (!Array.isArray(rows) || !rows.length) {
+          return (
+            <div/>
+          )
+        }
+        
         return (
             <Table>
                 <TableHead>
