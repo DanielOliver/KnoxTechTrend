@@ -25,7 +25,7 @@ class MeetupTemplate extends React.Component {
     render() {
         const { classes } = this.props;
         const meetup = this.props.data.meetup
-        const events = this.props.data.events.edges
+        const events = (this.props.data.events || { edges: [] } ).edges
         return (
             <Layout>
                 <Typography variant="display2" color="inherit" noWrap>
