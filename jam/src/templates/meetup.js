@@ -89,6 +89,7 @@ export const pageQuery = graphql`
                     Day: MeetupDateLocal(formatString: "YYYY-MM-dd")
                     UtcTime: MeetupDateUtc
                     MeetupDayOfWeek: MeetupDateLocal(formatString: "dddd")
+                    MeetupMonthName: MeetupDateLocal(formatString: "MMMM")
                 }
             }
         }

@@ -25,18 +25,19 @@ const IndexPage = (props) => {
     <StaticQuery
       query={graphql`
 query meetupDateList {
-allMeetupEvents(sort: {fields: [MeetupDateLocal], order: ASC}) {
-edges {
-  node {
-    MeetupDay: MeetupDateLocal(formatString: "MMMM DD, YYYY")
-    MeetupMonth: MeetupDateLocal(formatString: "MMMM 1, YYYY")
-    SortOrder: MeetupDateLocal(formatString: "YYYY-MM")
-    Day: MeetupDateLocal(formatString: "YYYY-MM-dd")
-    UtcTime: MeetupDateUtc
-    MeetupDayOfWeek: MeetupDateLocal(formatString: "dddd")
+  allMeetupEvents(sort: {fields: [MeetupDateLocal], order: ASC}) {
+    edges {
+      node {
+        MeetupDay: MeetupDateLocal(formatString: "MMMM DD, YYYY")
+        MeetupMonth: MeetupDateLocal(formatString: "MMMM 1, YYYY")
+        SortOrder: MeetupDateLocal(formatString: "YYYY-MM")
+        Day: MeetupDateLocal(formatString: "YYYY-MM-dd")
+        UtcTime: MeetupDateUtc
+        MeetupDayOfWeek: MeetupDateLocal(formatString: "dddd")
+        MeetupMonthName: MeetupDateLocal(formatString: "MMMM")
+      }
+    }
   }
-}
-}
 }
 `}
       render={data => {
