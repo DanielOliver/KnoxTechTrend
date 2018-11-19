@@ -32,16 +32,35 @@ const EventList = () => (
                     id
                     RsvpCount
                     VenueName
+                    PartitionKey
                 }
             }
         }
+        allMeetup {
+            edges {
+              node {
+                FullName
+                UrlName
+                trendURL
+                RowKey
+                PartitionKey
+              }
+            }
+          }
     }
     
     `}
-    render={data => (
-      <EventTable
-        includeMeetup={true}
-        rows={data.events.edges} />)
+    render={data => {
+      data.events.edges.forEach(({ node }) => {
+        let meetup = data.allMeetup.edges.map((x) => x.node).find(x => x.UrlName === node.PartitionKey) || {}
+        node.MeetupName = meetup.FullName
+      })
+
+      return (
+        <EventTable
+          includeMeetup={true}
+          rows={data.events.edges} />)
+    }
     }
   />
 )

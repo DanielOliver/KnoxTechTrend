@@ -39,27 +39,13 @@ exports.createPages = ({ actions, graphql }) => {
                 FullName
                 UrlName
                 trendURL
+                RowKey
               }
             }
           }
       }
-    `).then(result => {
-            if (result.errors) {
-                return Promise.reject(result.errors)
-            }
+    `)
 
-            result.data.allMeetup.edges.filter(({node}) => node.FullName && node.FullName != "").forEach(({ node }) => {
-                createPage({
-                    path: node.trendURL,
-                    component: meetupTemplate,
-                    context: {
-                        meetupName: node.UrlName
-                    }
-                })
-            })
-        })
-
-        
     const eventPromise = graphql(`
     {
       allMeetupEvents {
@@ -75,22 +61,45 @@ exports.createPages = ({ actions, graphql }) => {
           }
         }
     }
-  `).then(result => {
-          if (result.errors) {
-              return Promise.reject(result.errors)
-          }
+  `)
 
-          result.data.allMeetupEvents.edges.forEach(({ node }) => {
-              createPage({
-                  path: node.trendURL,
-                  component: eventTemplate,
-                  context: {
-                      meetupName: node.PartitionKey,
-                      eventID: node.RowKey
-                  }
-              })
-          })
-      })
+    Promise.all([meetupPromise, eventPromise])
+        .then(result => {
+            if (result.errors) {
+                return Promise.reject(result.errors)
+            }
 
-    return Promise.all([ meetupPromise, eventPromise ])
+            let [meetups, events] = result
+
+            let meetupList = meetups.data.allMeetup.edges.filter(({ node }) => node.FullName && node.FullName != "").map(({ node }) => node)
+            let eventList = events.data.allMeetupEvents.edges.map(({ node }) => node)
+            meetupList.forEach((node) => {
+                createPage({
+                    path: node.trendURL,
+                    component: meetupTemplate,
+                    context: {
+                        meetupName: node.UrlName
+                    }
+                })
+            })
+
+            eventList.forEach((node) => {
+                let meetup = meetupList.find(x => x.UrlName === node.PartitionKey) || {}
+
+                createPage({
+                    path: node.trendURL,
+                    component: eventTemplate,
+                    context: {
+                        meetupUrl: node.PartitionKey,
+                        eventID: node.RowKey,
+                        meetupName: meetup.FullName
+                    }
+                })
+            })
+
+
+
+        })
+
+    return Promise.all([meetupPromise, eventPromise])
 }
