@@ -20,7 +20,6 @@ class EventTemplate extends React.Component {
     render() {
         const meetup = this.props.data.meetup
         const event = this.props.data.event
-        console.log(this.props.pageContext)
         return (
             <Layout>
                 <div>
