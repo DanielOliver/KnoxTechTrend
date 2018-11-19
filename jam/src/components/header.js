@@ -8,12 +8,12 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Hidden from '@material-ui/core/Hidden';
-import Divider from '@material-ui/core/Divider';
 import MenuIcon from '@material-ui/icons/Menu';
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItem from '@material-ui/core/ListItem'
 import withRoot from '../withRoot';
 import PropTypes from 'prop-types'
+import Logo from '../../static/Asset 1.png'
 
 const MenuItemList = (
   <div>
@@ -89,8 +89,7 @@ class ResponsiveDrawer extends React.Component {
 
     const drawer = (
       <div>
-        <div className={classes.toolbar} />
-        <Divider />
+        <img src={Logo} alt='logo' />
         <List>{MenuItemList}</List>
       </div>
     );
