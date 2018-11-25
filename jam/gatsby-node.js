@@ -1,5 +1,6 @@
-var path = require('path')
-var { GraphQLString } = require('gatsby/graphql')
+const path = require('path')
+const { GraphQLString } = require('gatsby/graphql')
+const _ = require('lodash')
 
 exports.setFieldsOnGraphQLNodeType = ({ type }) => {
     if (type.name === `meetup`) {
@@ -19,6 +20,12 @@ exports.setFieldsOnGraphQLNodeType = ({ type }) => {
                 resolve: (source) => {
                     return `/event/${source.RowKey}`
                 }
+            },
+            venueURL: {
+                type: GraphQLString,
+                resolve: (source) => {
+                    return `/venue/${_.kebabCase(source.VenueName)}`
+                }
             }
         }
     }
@@ -30,6 +37,7 @@ exports.createPages = ({ actions, graphql }) => {
 
     const meetupTemplate = path.resolve(`src/templates/meetup.js`)
     const eventTemplate = path.resolve(`src/templates/event.js`)
+    const venueTemplate = path.resolve(`src/templates/venue.js`)
 
     const meetupPromise = graphql(`
       {
@@ -57,6 +65,9 @@ exports.createPages = ({ actions, graphql }) => {
                 Link
                 trendURL
                 PartitionKey
+                venueURL
+                VenueID
+                VenueName
             }
           }
         }
@@ -73,6 +84,7 @@ exports.createPages = ({ actions, graphql }) => {
 
             let meetupList = meetups.data.allMeetup.edges.filter(({ node }) => node.FullName && node.FullName != "").map(({ node }) => node)
             let eventList = events.data.allMeetupEvents.edges.map(({ node }) => node)
+
             meetupList.forEach((node) => {
                 createPage({
                     path: node.trendURL,
@@ -95,10 +107,18 @@ exports.createPages = ({ actions, graphql }) => {
                         meetupName: meetup.FullName
                     }
                 })
+
+                if (!(typeof node.venueURL === 'undefined')) {
+                    createPage({
+                        path: node.venueURL,
+                        component: venueTemplate,
+                        context: {
+                            venueID: node.VenueID,
+                            venueName: node.VenueName
+                        }
+                    })
+                }
             })
-
-
-
         })
 
     return Promise.all([meetupPromise, eventPromise])
