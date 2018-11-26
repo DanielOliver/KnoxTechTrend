@@ -38,6 +38,7 @@ exports.createPages = ({ actions, graphql }) => {
     const meetupTemplate = path.resolve(`src/templates/meetup.js`)
     const eventTemplate = path.resolve(`src/templates/event.js`)
     const venueTemplate = path.resolve(`src/templates/venue.js`)
+    const venueOverviewTemplate = path.resolve(`src/templates/venueOverview.js`)
 
     const meetupPromise = graphql(`
       {
@@ -84,6 +85,7 @@ exports.createPages = ({ actions, graphql }) => {
 
             let meetupList = meetups.data.allMeetup.edges.filter(({ node }) => node.FullName && node.FullName != "").map(({ node }) => node)
             let eventList = events.data.allMeetupEvents.edges.map(({ node }) => node)
+            let venueList = {}
 
             meetupList.forEach((node) => {
                 createPage({
@@ -108,17 +110,39 @@ exports.createPages = ({ actions, graphql }) => {
                     }
                 })
 
-                if (!(typeof node.venueURL === 'undefined')) {
-                    createPage({
-                        path: node.venueURL,
-                        component: venueTemplate,
-                        context: {
+                if (node.venueURL && node.VenueID) {
+                    let venue = venueList[node.venueURL];
+                    if(venue) {
+                        venue.EventCount += 1
+                    } else { 
+                        venueList[node.venueURL] = {
                             venueID: node.VenueID,
-                            venueName: node.VenueName
+                            venueName: node.VenueName,
+                            venueURL: node.venueURL,
+                            EventCount: 1                           
                         }
-                    })
+
+                        createPage({
+                            path: node.venueURL,
+                            component: venueTemplate,
+                            context: {
+                                venueID: node.VenueID,
+                                venueName: node.VenueName                                
+                            }
+                        })
+                    }
                 }
             })
+
+            createPage({
+                path: 'venue',
+                component: venueOverviewTemplate,
+                context: {
+                    rows: Object.values(venueList)
+                }
+            })
+            
+
         })
 
     return Promise.all([meetupPromise, eventPromise])

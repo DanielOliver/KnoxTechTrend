@@ -35,6 +35,12 @@ const MenuItemList = (
       to='/event'>
       <ListItemText primary="Events" />
     </ListItem>
+    <ListItem
+      button
+      component={Link}
+      to='/venue'>
+      <ListItemText primary="Venues" />
+    </ListItem>
   </div>
 );
 

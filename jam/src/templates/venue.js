@@ -4,7 +4,9 @@ import Layout from '../components/layout'
 // import { Link } from 'gatsby'
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import EventTable from "../components/EventTable";
 
 const styles = theme => ({
     root: {
@@ -18,11 +20,14 @@ const styles = theme => ({
 });
 class VenueTemplate extends React.Component {
     render() {
+        console.log(this.props)
         const event = this.props.data.event;
+        const { classes } = this.props;
+        const meetupEvents = (this.props.data.meetupEvents || { edges: [] }).edges
 
         return (
             <Layout>
-                <div>
+                <div className={classes.root}>
                     <Typography variant="display2" color="inherit">
                         {event.VenueName}
                     </Typography>
@@ -34,6 +39,16 @@ class VenueTemplate extends React.Component {
                             {event.VenueState && <> <br /> {event.VenueState} </>}
                         </p>
                     </Typography>
+                    <Grid container>
+                        <Grid item xs={12} className={classes.grid}>
+                            <Paper className={classes.paper}>
+                                <Typography variant="display1" color="inherit" noWrap>
+                                    Events
+                                </Typography>
+                                <EventTable rows={meetupEvents} />
+                            </Paper>
+                        </Grid>
+                    </Grid>
                 </div>
             </Layout>
         )
@@ -43,7 +58,7 @@ class VenueTemplate extends React.Component {
 export default withStyles(styles, { withTheme: true })(VenueTemplate)
 
 export const pageQuery = graphql`
-    query($venueID: Int!) {
+    query($venueID: Int!, $venueName: String!) {
         event: meetupEvents(VenueID: {eq: $venueID }) {
                 Name
                 RowKey
@@ -60,5 +75,19 @@ export const pageQuery = graphql`
                 VenueState
                 VenueZip
             }
+        meetupEvents: allMeetupEvents(filter: {VenueName: { eq: $venueName }}, sort: {fields: [MeetupDateLocal], order: DESC}) {
+            edges {
+                node {
+                    Name
+                    RowKey
+                    MeetupDateLocal(formatString: "MMMM DD, YYYY")
+                    Link
+                    trendURL
+                    RsvpCount
+                    VenueName
+                    id
+                }
+            }
         }
+    }
 `
