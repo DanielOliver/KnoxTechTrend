@@ -11,7 +11,7 @@ import Hidden from '@material-ui/core/Hidden';
 import MenuIcon from '@material-ui/icons/Menu';
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItem from '@material-ui/core/ListItem'
-import withRoot from '../withRoot';
+// import withRoot from '../withRoot';
 import PropTypes from 'prop-types'
 import Logo from '../../static/Asset 1.png'
 
@@ -160,7 +160,7 @@ ResponsiveDrawer.propTypes = {
   theme: PropTypes.object.isRequired,
 };
 
-const ResponsiveDrawerLayout = withRoot(withStyles(styles, { withTheme: true })(ResponsiveDrawer));
+const ResponsiveDrawerLayout = withStyles(styles, { withTheme: true, name: '12345' })(ResponsiveDrawer);
 
 
 const Header = ({ siteTitle, children }) => (
