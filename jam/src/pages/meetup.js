@@ -86,8 +86,8 @@ const MeetupPage = (props) => {
   return (
     <Layout>
       <Helmet>
-        <title>Knox Tech Trend Meetups</title>
-        <meta name="description" content="Knox Tech Trend Meetups" />
+        <title>Knox Tech Trend - Meetups</title>
+        <meta name="description" content="Knox Tech Trend - Meetups" />
       </Helmet>
       <div className={classes.root}>
         <Grid container>

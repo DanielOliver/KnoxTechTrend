@@ -56,8 +56,8 @@ const VenuePage = (props) => {
   return (
     <Layout>
       <Helmet>
-        <title>Knox Tech Trend Venues</title>
-        <meta name="description" content="Knox Tech Trend Venues" />
+        <title>Knox Tech Trend - Venues</title>
+        <meta name="description" content="Knox Tech Trend - Venues" />
       </Helmet>
       <div>
         <div className={classes.root}>

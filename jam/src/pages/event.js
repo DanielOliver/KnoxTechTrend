@@ -71,8 +71,8 @@ const EventPage = (props) => {
   return (
     <Layout>
       <Helmet>
-        <title>Knox Tech Trend Events</title>
-        <meta name="description" content="Knox Tech Trend Events" />
+        <title>Knox Tech Trend - Events</title>
+        <meta name="description" content="Knox Tech Trend - Events" />
       </Helmet>
       <div>
         <div className={classes.root}>
