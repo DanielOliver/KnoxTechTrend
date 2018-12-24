@@ -50,7 +50,7 @@ class EventTemplate extends React.Component {
     }
 }
 
-export default withStyles(styles, { withTheme: true })(EventTemplate)
+export default withStyles(styles, { withTheme: true, name: 'eventTemplateCSS' })(EventTemplate)
 
 export const pageQuery = graphql`
     query($meetupUrl: String!, $eventID: String!) {

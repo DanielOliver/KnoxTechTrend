@@ -100,4 +100,4 @@ const MeetupPage = (props) => {
   )
 }
 
-export default withStyles(styles, { withTheme: true })(MeetupPage)
+export default withStyles(styles, { withTheme: true, name: 'meetupOverviewCSS' })(MeetupPage)

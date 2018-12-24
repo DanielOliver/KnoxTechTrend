@@ -72,5 +72,5 @@ const VenuePage = (props) => {
   )
 }
 
-export default withStyles(styles, { withTheme: true })(VenuePage)
+export default withStyles(styles, { withTheme: true, name: 'venueOverviewCSS' })(VenuePage)
 

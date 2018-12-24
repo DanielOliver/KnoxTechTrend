@@ -76,4 +76,4 @@ query meetupDateList {
   )
 }
 
-export default withStyles(styles, { withTheme: true })(IndexPage)
+export default withStyles(styles, { withTheme: true, name: 'indexCSS' })(IndexPage)

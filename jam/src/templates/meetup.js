@@ -103,4 +103,4 @@ export const pageQuery = graphql`
     }
 `
 
-export default withStyles(styles, { withTheme: true })(MeetupTemplate)
+export default withStyles(styles, { withTheme: true, name: 'meetupTemplateCSS' })(MeetupTemplate)

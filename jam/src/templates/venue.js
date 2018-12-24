@@ -60,7 +60,7 @@ class VenueTemplate extends React.Component {
     }
 }
 
-export default withStyles(styles, { withTheme: true })(VenueTemplate)
+export default withStyles(styles, { withTheme: true, name: 'venueTemplateCSS' })(VenueTemplate)
 
 export const pageQuery = graphql`
     query($venueID: Int!, $venueName: String!) {

@@ -87,5 +87,5 @@ const EventPage = (props) => {
   )
 }
 
-export default withStyles(styles, { withTheme: true })(EventPage)
+export default withStyles(styles, { withTheme: true, name: 'eventOverviewCSS' })(EventPage)
 
