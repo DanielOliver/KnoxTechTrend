@@ -25,7 +25,9 @@ class MeetupTemplate extends React.Component {
     render() {
         const { classes } = this.props;
         const meetup = this.props.data.meetup
-        const events = (this.props.data.events || { edges: [] } ).edges
+        const events = (this.props.data.events || { edges: [] }).edges
+        const { eventsByMonth, eventsByWeekday } = this.props.pathContext
+
         return (
             <Layout>
                 <Typography variant="display2" color="inherit" noWrap>
@@ -46,7 +48,7 @@ class MeetupTemplate extends React.Component {
                                 <Typography variant="display1" color="inherit" noWrap>
                                     Monthly Meetup Count (past year)
                                 </Typography>
-                                <MeetupMonthGraph meetupEvents={events} />
+                                <MeetupMonthGraph eventsByMonth={eventsByMonth} meetupEvents={events} />
                             </Paper>
                         </Grid>
                         <Grid item xs={12} className={classes.grid}>
@@ -54,7 +56,7 @@ class MeetupTemplate extends React.Component {
                                 <Typography variant="display1" color="inherit" noWrap>
                                     Meetups Per Day of Week (past year)
                                 </Typography>
-                                <MeetupWeekdayGraph meetupEvents={events} />
+                                <MeetupWeekdayGraph eventsByWeekday={eventsByWeekday} meetupEvents={events} />
                             </Paper>
                         </Grid>
                     </Grid>

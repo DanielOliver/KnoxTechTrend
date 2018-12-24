@@ -27,7 +27,7 @@ const VenueTable = ({ rows }) => {
       <TableHead>
         <TableRow>
           <TableCell>Venue</TableCell>
-          <TableCell numeric>Event Count</TableCell>
+          <TableCell align="right">Event Count</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -39,7 +39,7 @@ const VenueTable = ({ rows }) => {
               <TableCell component="th" scope="row">
                 <Link to={row.venueURL}>{row.venueName}</Link>
               </TableCell>
-              <TableCell numeric>
+              <TableCell align="right">
                 {row.EventCount}
               </TableCell>
             </TableRow>

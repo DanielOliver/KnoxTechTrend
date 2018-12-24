@@ -20,7 +20,6 @@ const styles = theme => ({
 });
 class VenueTemplate extends React.Component {
     render() {
-        console.log(this.props)
         const event = this.props.data.event;
         const { classes } = this.props;
         const meetupEvents = (this.props.data.meetupEvents || { edges: [] }).edges

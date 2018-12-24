@@ -27,7 +27,7 @@ const MeetupTable = ({ rows }) => {
       <TableHead>
         <TableRow>
           <TableCell>Meetup</TableCell>
-          <TableCell numeric>Members</TableCell>
+          <TableCell align="right">Members</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -38,7 +38,7 @@ const MeetupTable = ({ rows }) => {
               <TableCell component="th" scope="row">
                 <Link to={row.trendURL}>{row.FullName}</Link>
               </TableCell>
-              <TableCell numeric>
+              <TableCell align="right">
                 {row.MembersCount}
               </TableCell>
             </TableRow>

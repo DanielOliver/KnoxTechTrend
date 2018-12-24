@@ -32,6 +32,70 @@ exports.setFieldsOnGraphQLNodeType = ({ type }) => {
     return {}
 }
 
+const createMeetupByMonthObject = (meetupEvents) => {
+    var oneYearAgo = new Date();
+    oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+
+    if (!Array.isArray(meetupEvents) || !meetupEvents.length) {
+        return { monthData: [], hasData: 0 };
+    } else {
+        const monthObject =
+            meetupEvents
+                .filter(x => Date.parse(x.MeetupMonth) > oneYearAgo)
+                .map(x => ({
+                    x: x.MeetupMonthName,
+                    y: 1,
+                    z: x.MeetupMonth
+                })).reduce(function (r, a) {
+                    r[a.x] = r[a.x] || { x: a.x, y: 0 };
+                    r[a.x].z = a.z;
+                    r[a.x].y += 1;
+                    return r;
+                }, Object.create(null));
+
+        const values =
+            Object.values(monthObject).sort(function (a, b) {
+                return Date.parse(a.z) - Date.parse(b.z);
+            })
+
+        if (values.length > 0) {
+            return { monthData: values, hasData: 1 };
+        } else {
+            return { monthData: [], hasData: 0 };
+        }
+    }
+}
+
+
+const createMeetupByWeekdayObject = (meetupEvents) => {
+    var oneYearAgo = new Date();
+    oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+
+    if (!Array.isArray(meetupEvents) || !meetupEvents.length) {
+        return { values: [], hasData: 0 };
+    } else {
+        const weekdayObject =
+            meetupEvents
+                .filter(x => Date.parse(x.MeetupMonth) > oneYearAgo)
+                .map(x => ({
+                    x: x.MeetupDayOfWeek,
+                    y: 1
+                })).reduce(function (r, a) {
+                    r[a.x] = r[a.x] || { x: a.x, y: 0 };
+                    r[a.x].y += 1;
+                    return r;
+                }, Object.create(null));
+
+        const values =
+            Object.values(weekdayObject).sort(function (a, b) {
+                return b.y - a.y;
+            })
+
+        return { values: values, hasData: values.length };
+    }
+}
+
+
 exports.createPages = ({ actions, graphql }) => {
     const { createPage } = actions
 
@@ -69,11 +133,20 @@ exports.createPages = ({ actions, graphql }) => {
                 venueURL
                 VenueID
                 VenueName
+                    
+                MeetupDay: MeetupDateLocal(formatString: "MMMM DD, YYYY")
+                MeetupMonth: MeetupDateLocal(formatString: "MMMM 1, YYYY")
+                SortOrder: MeetupDateLocal(formatString: "YYYY-MM")
+                Day: MeetupDateLocal(formatString: "YYYY-MM-dd")
+                UtcTime: MeetupDateUtc
+                MeetupDayOfWeek: MeetupDateLocal(formatString: "dddd")
+                MeetupMonthName: MeetupDateLocal(formatString: "MMMM")
             }
           }
         }
     }
   `)
+
 
     Promise.all([meetupPromise, eventPromise])
         .then(result => {
@@ -88,11 +161,15 @@ exports.createPages = ({ actions, graphql }) => {
             let venueList = {}
 
             meetupList.forEach((node) => {
+                let events = eventList.filter(x => node.UrlName === x.PartitionKey)
+
                 createPage({
                     path: node.trendURL,
                     component: meetupTemplate,
                     context: {
-                        meetupName: node.UrlName
+                        meetupName: node.UrlName,
+                        eventsByMonth: createMeetupByMonthObject( events  ),
+                        eventsByWeekday: createMeetupByWeekdayObject( events )
                     }
                 })
             })
@@ -112,14 +189,14 @@ exports.createPages = ({ actions, graphql }) => {
 
                 if (node.venueURL && node.VenueID) {
                     let venue = venueList[node.venueURL];
-                    if(venue) {
+                    if (venue) {
                         venue.EventCount += 1
-                    } else { 
+                    } else {
                         venueList[node.venueURL] = {
                             venueID: node.VenueID,
                             venueName: node.VenueName,
                             venueURL: node.venueURL,
-                            EventCount: 1                           
+                            EventCount: 1
                         }
 
                         createPage({
@@ -127,7 +204,7 @@ exports.createPages = ({ actions, graphql }) => {
                             component: venueTemplate,
                             context: {
                                 venueID: node.VenueID,
-                                venueName: node.VenueName                                
+                                venueName: node.VenueName
                             }
                         })
                     }
@@ -141,7 +218,7 @@ exports.createPages = ({ actions, graphql }) => {
                     rows: Object.values(venueList)
                 }
             })
-            
+
 
         })
 
