@@ -1,6 +1,7 @@
 /* eslint-disable react/no-danger */
 
 import React from "react"
+import ReactDOM from "react-dom"
 import Layout from "./src/components/layout"
 
 export const wrapPageElement = ({ element, props }) => {
@@ -14,3 +15,9 @@ export const wrapPageElement = ({ element, props }) => {
 //   // including location, data, etc - you don't need to pass it
 //   return (<Layout>{element}</Layout>)
 // }
+
+export const replaceHydrateFunction = () => {
+  return (element, container, callback) => {
+    ReactDOM.render(element, container, callback)
+  }
+}
