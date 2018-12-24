@@ -1,10 +1,10 @@
 import React from "react"
 import { graphql } from "gatsby"
-import Layout from '../components/layout'
+// import Layout from '../components/layout'
 import { Link } from 'gatsby'
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import {Helmet} from "react-helmet";
+import { Helmet } from "react-helmet";
 
 
 const styles = theme => ({
@@ -24,33 +24,31 @@ class EventTemplate extends React.Component {
         const { seoTitle, seoDescription } = this.props.pageContext
 
         return (
-            <Layout>
+            <div>
                 <Helmet>
                     <title>{seoTitle}</title>
                     <meta name="description" content={seoDescription} />
                 </Helmet>
-                <div>
-                    <Typography variant="display2" color="inherit">
-                        {event.Name}
-                    </Typography>
-                    <Typography variant="display1" color="inherit">
-                        <p>
-                            {event.VenueName && event.venueURL && <> <Link to={event.venueURL}>{event.VenueName}</Link> <br /> </>}
-                            {event.MeetupDateLocal}
-                            <br />
-                            <Link to={meetup.trendURL}>{this.props.pageContext.meetupName}</Link>
-                        </p>
-                    </Typography>
+                <Typography variant="display2" color="inherit">
+                    {event.Name}
+                </Typography>
+                <Typography variant="display1" color="inherit">
+                    <p>
+                        {event.VenueName && event.venueURL && <> <Link to={event.venueURL}>{event.VenueName}</Link> <br /> </>}
+                        {event.MeetupDateLocal}
+                        <br />
+                        <Link to={meetup.trendURL}>{this.props.pageContext.meetupName}</Link>
+                    </p>
+                </Typography>
 
-                    <hr />
-                    <div dangerouslySetInnerHTML={{ __html: event.Description }} />
-                </div>
-            </Layout>
+                <hr />
+                <div dangerouslySetInnerHTML={{ __html: event.Description }} />
+            </div>
         )
     }
 }
 
-export default withStyles(styles, { withTheme: true })(EventTemplate)
+export default withStyles(styles, { withTheme: true, name: 'eventTemplateCSS' })(EventTemplate)
 
 export const pageQuery = graphql`
     query($meetupUrl: String!, $eventID: String!) {

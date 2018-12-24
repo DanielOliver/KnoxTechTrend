@@ -1,7 +1,23 @@
-/**
- * Implement Gatsby's Browser APIs in this file.
- *
- * See: https://www.gatsbyjs.org/docs/browser-apis/
- */
+/* eslint-disable react/no-danger */
 
- // You can delete this file if you're not using it
+import React from "react"
+import ReactDOM from "react-dom"
+import Layout from "./src/components/layout"
+
+export const wrapRootElement = ({ element }) => {
+  // props provide same data to Layout as Page element will get
+  // including location, data, etc - you don't need to pass it
+  return (<Layout>{element}</Layout>)
+}
+
+// export const wrapRootElement = ({ element }) => {
+//   // props provide same data to Layout as Page element will get
+//   // including location, data, etc - you don't need to pass it
+//   return (<Layout>{element}</Layout>)
+// }
+
+export const replaceHydrateFunction = () => {
+  return (element, container, callback) => {
+    ReactDOM.render(element, container, callback)
+  }
+}

@@ -1,10 +1,10 @@
 import React from 'react'
 import { StaticQuery, graphql } from "gatsby"
-import Layout from '../components/layout'
+// import Layout from '../components/layout'
 import EventTable from '../components/EventTable';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import {Helmet} from "react-helmet";
+import { Helmet } from "react-helmet";
 
 const styles = theme => ({
   root: {
@@ -69,23 +69,21 @@ const EventList = () => (
 const EventPage = (props) => {
   const { classes } = props;
   return (
-    <Layout>
+    <>
       <Helmet>
         <title>Knox Tech Trend - Events</title>
         <meta name="description" content="Knox Tech Trend - Events" />
       </Helmet>
-      <div>
-        <div className={classes.root}>
-          <Grid container>
-            <Grid item xs={12} className={classes.grid}>
-              <EventList />
-            </Grid>
+      <div className={classes.root}>
+        <Grid container>
+          <Grid item xs={12} className={classes.grid}>
+            <EventList />
           </Grid>
-        </div>
+        </Grid>
       </div>
-    </Layout>
+    </>
   )
 }
 
-export default withStyles(styles, { withTheme: true })(EventPage)
+export default withStyles(styles, { withTheme: true, name: 'eventOverviewCSS' })(EventPage)
 

@@ -160,13 +160,4 @@ ResponsiveDrawer.propTypes = {
   theme: PropTypes.object.isRequired,
 };
 
-const ResponsiveDrawerLayout = withStyles(styles, { withTheme: true, name: '12345' })(ResponsiveDrawer);
-
-
-const Header = ({ siteTitle, children }) => (
-  <ResponsiveDrawerLayout>
-    {children}
-  </ResponsiveDrawerLayout>
-)
-
-export default Header
+export default withStyles(styles, { withTheme: true, name: '12345' })(ResponsiveDrawer);
