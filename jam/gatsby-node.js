@@ -172,7 +172,7 @@ exports.createPages = ({ actions, graphql }) => {
                         meetupName: node.UrlName,
                         eventsByMonth: createMeetupByMonthObject( events  ),
                         eventsByWeekday: createMeetupByWeekdayObject( events ),
-                        seoTitle: `${siteTitle} - Meetup: ${node.Name}`,
+                        seoTitle: `${siteTitle} - Meetup: ${node.FullName}`,
                         seoDescription: `${siteTitle} - Meetup: ${node.FullName}`
                     }
                 })
