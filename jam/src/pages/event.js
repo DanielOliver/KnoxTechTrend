@@ -4,6 +4,7 @@ import Layout from '../components/layout'
 import EventTable from '../components/EventTable';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import {Helmet} from "react-helmet";
 
 const styles = theme => ({
   root: {
@@ -69,6 +70,10 @@ const EventPage = (props) => {
   const { classes } = props;
   return (
     <Layout>
+      <Helmet>
+        <title>Knox Tech Trend Events</title>
+        <meta name="description" content="Knox Tech Trend Events" />
+      </Helmet>
       <div>
         <div className={classes.root}>
           <Grid container>

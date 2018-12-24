@@ -2,6 +2,8 @@ const path = require('path')
 const { GraphQLString } = require('gatsby/graphql')
 const _ = require('lodash')
 
+const siteTitle = "Knox Tech Trend"
+
 exports.setFieldsOnGraphQLNodeType = ({ type }) => {
     if (type.name === `meetup`) {
         return {
@@ -169,7 +171,9 @@ exports.createPages = ({ actions, graphql }) => {
                     context: {
                         meetupName: node.UrlName,
                         eventsByMonth: createMeetupByMonthObject( events  ),
-                        eventsByWeekday: createMeetupByWeekdayObject( events )
+                        eventsByWeekday: createMeetupByWeekdayObject( events ),
+                        seoTitle: `${siteTitle} - Meetup: ${node.Name}`,
+                        seoDescription: `${siteTitle} - Meetup: ${node.FullName}`
                     }
                 })
             })
@@ -183,7 +187,9 @@ exports.createPages = ({ actions, graphql }) => {
                     context: {
                         meetupUrl: node.PartitionKey,
                         eventID: node.RowKey,
-                        meetupName: meetup.FullName
+                        meetupName: meetup.FullName,
+                        seoTitle: `${siteTitle} - Event: ${node.Name}`,
+                        seoDescription: `${siteTitle} - Event for ${meetup.FullName}: ${node.Name}`
                     }
                 })
 
@@ -204,7 +210,9 @@ exports.createPages = ({ actions, graphql }) => {
                             component: venueTemplate,
                             context: {
                                 venueID: node.VenueID,
-                                venueName: node.VenueName
+                                venueName: node.VenueName,
+                                seoTitle: `${siteTitle} - Venue: ${node.VenueName}`,
+                                seoDescription: `${siteTitle} - Venue: ${node.VenueName}`
                             }
                         })
                     }

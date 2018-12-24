@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import EventTable from "../components/EventTable";
+import {Helmet} from "react-helmet";
 
 const styles = theme => ({
     root: {
@@ -23,9 +24,14 @@ class VenueTemplate extends React.Component {
         const event = this.props.data.event;
         const { classes } = this.props;
         const meetupEvents = (this.props.data.meetupEvents || { edges: [] }).edges
+        const { seoTitle, seoDescription } = this.props.pageContext
 
         return (
             <Layout>
+                <Helmet>
+                    <title>{seoTitle}</title>
+                    <meta name="description" content={seoDescription} />
+                </Helmet>
                 <div className={classes.root}>
                     <Typography variant="display2" color="inherit">
                         {event.VenueName}

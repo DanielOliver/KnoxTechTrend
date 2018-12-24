@@ -9,6 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import {Helmet} from "react-helmet";
 
 const styles = theme => ({
   root: {
@@ -84,6 +85,10 @@ const MeetupPage = (props) => {
   const { classes } = props;
   return (
     <Layout>
+      <Helmet>
+        <title>Knox Tech Trend Meetups</title>
+        <meta name="description" content="Knox Tech Trend Meetups" />
+      </Helmet>
       <div className={classes.root}>
         <Grid container>
           <Grid item xs={12} className={classes.grid}>

@@ -8,6 +8,7 @@ import MeetupMonthGraph from '../components/MeetupMonthGraph';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import MeetupWeekdayGraph from "../components/MeetupWeekdayGraph";
+import {Helmet} from "react-helmet";
 
 const styles = theme => ({
     root: {
@@ -26,10 +27,14 @@ class MeetupTemplate extends React.Component {
         const { classes } = this.props;
         const meetup = this.props.data.meetup
         const events = (this.props.data.events || { edges: [] }).edges
-        const { eventsByMonth, eventsByWeekday } = this.props.pathContext
+        const { eventsByMonth, eventsByWeekday, seoTitle, seoDescription } = this.props.pageContext
 
         return (
             <Layout>
+                <Helmet>
+                    <title>{seoTitle}</title>
+                    <meta name="description" content={seoDescription} />
+                </Helmet>
                 <Typography variant="display2" color="inherit" noWrap>
                     {meetup.FullName}
                 </Typography>

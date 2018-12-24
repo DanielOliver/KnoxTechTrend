@@ -4,6 +4,7 @@ import Layout from '../components/layout'
 import { Link } from 'gatsby'
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import {Helmet} from "react-helmet";
 
 
 const styles = theme => ({
@@ -20,15 +21,21 @@ class EventTemplate extends React.Component {
     render() {
         const meetup = this.props.data.meetup
         const event = this.props.data.event
+        const { seoTitle, seoDescription } = this.props.pageContext
+
         return (
             <Layout>
+                <Helmet>
+                    <title>{seoTitle}</title>
+                    <meta name="description" content={seoDescription} />
+                </Helmet>
                 <div>
                     <Typography variant="display2" color="inherit">
                         {event.Name}
                     </Typography>
                     <Typography variant="display1" color="inherit">
                         <p>
-                            {event.VenueName && event.venueURL && <> <Link to={event.venueURL}>{event.VenueName}</Link> <br/ > </>}
+                            {event.VenueName && event.venueURL && <> <Link to={event.venueURL}>{event.VenueName}</Link> <br /> </>}
                             {event.MeetupDateLocal}
                             <br />
                             <Link to={meetup.trendURL}>{this.props.pageContext.meetupName}</Link>

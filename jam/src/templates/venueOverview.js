@@ -8,6 +8,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { Link } from 'gatsby'
+import {Helmet} from "react-helmet";
 
 const styles = theme => ({
   root: {
@@ -32,8 +33,8 @@ const VenueTable = ({ rows }) => {
       </TableHead>
       <TableBody>
         {rows.sort(function (a, b) {
-                    return b.EventCount - a.EventCount;
-                }).map(row => {
+          return b.EventCount - a.EventCount;
+        }).map(row => {
           return (
             <TableRow key={row.venueID}>
               <TableCell component="th" scope="row">
@@ -54,6 +55,10 @@ const VenuePage = (props) => {
   const { classes, pageContext } = props;
   return (
     <Layout>
+      <Helmet>
+        <title>Knox Tech Trend Venues</title>
+        <meta name="description" content="Knox Tech Trend Venues" />
+      </Helmet>
       <div>
         <div className={classes.root}>
           <Grid container>
