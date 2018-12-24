@@ -4,7 +4,6 @@ const React = require('react');
 const { renderToString } = require('react-dom/server');
 const { JssProvider } = require('react-jss');
 const getPageContext = require('./src/getPageContext');
-const Layout = require('./src/components/layout');
 
 function replaceRenderer({ bodyComponent, replaceBodyHTMLString, setHeadComponents }) {
   // Get the context of the page to collected side effects.
@@ -34,9 +33,3 @@ function replaceRenderer({ bodyComponent, replaceBodyHTMLString, setHeadComponen
 }
 
 exports.replaceRenderer = replaceRenderer;
-
-exports.wrapPageElement = ({ element, props }) => {
-  // props provide same data to Layout as Page element will get
-  // including location, data, etc - you don't need to pass it
-  return (<Layout {...props}>{element}</Layout>)
-}
