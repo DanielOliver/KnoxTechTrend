@@ -1,5 +1,5 @@
 import React from 'react'
-import Layout from '../components/layout'
+// import Layout from '../components/layout'
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Table from '@material-ui/core/Table';
@@ -8,7 +8,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { Link } from 'gatsby'
-import {Helmet} from "react-helmet";
+import { Helmet } from "react-helmet";
 
 const styles = theme => ({
   root: {
@@ -54,21 +54,17 @@ const VenueTable = ({ rows }) => {
 const VenuePage = (props) => {
   const { classes, pageContext } = props;
   return (
-    <Layout>
+    <div className={classes.root}>
       <Helmet>
         <title>Knox Tech Trend - Venues</title>
         <meta name="description" content="Knox Tech Trend - Venues" />
       </Helmet>
-      <div>
-        <div className={classes.root}>
-          <Grid container>
-            <Grid item xs={12} className={classes.grid}>
-              <VenueTable rows={pageContext.rows} />
-            </Grid>
-          </Grid>
-        </div>
-      </div>
-    </Layout>
+      <Grid container>
+        <Grid item xs={12} className={classes.grid}>
+          <VenueTable rows={pageContext.rows} />
+        </Grid>
+      </Grid>
+    </div>
   )
 }
 

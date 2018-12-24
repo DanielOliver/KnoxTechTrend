@@ -1,6 +1,6 @@
 import React from "react"
 import { graphql } from "gatsby"
-import Layout from '../components/layout'
+// import Layout from '../components/layout'
 import EventTable from "../components/EventTable";
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -8,7 +8,7 @@ import MeetupMonthGraph from '../components/MeetupMonthGraph';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import MeetupWeekdayGraph from "../components/MeetupWeekdayGraph";
-import {Helmet} from "react-helmet";
+import { Helmet } from "react-helmet";
 
 const styles = theme => ({
     root: {
@@ -30,7 +30,7 @@ class MeetupTemplate extends React.Component {
         const { eventsByMonth, eventsByWeekday, seoTitle, seoDescription } = this.props.pageContext
 
         return (
-            <Layout>
+            <div>
                 <Helmet>
                     <title>{seoTitle}</title>
                     <meta name="description" content={seoDescription} />
@@ -66,7 +66,7 @@ class MeetupTemplate extends React.Component {
                         </Grid>
                     </Grid>
                 </div>
-            </Layout>
+            </div>
         )
     }
 }

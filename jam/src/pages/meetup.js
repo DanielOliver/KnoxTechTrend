@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'gatsby'
 import { StaticQuery, graphql } from "gatsby"
-import Layout from '../components/layout'
+// import Layout from '../components/layout'
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -9,7 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import {Helmet} from "react-helmet";
+import { Helmet } from "react-helmet";
 
 const styles = theme => ({
   root: {
@@ -84,19 +84,17 @@ const MeetupList = () => (
 const MeetupPage = (props) => {
   const { classes } = props;
   return (
-    <Layout>
+    <div className={classes.root}>
       <Helmet>
         <title>Knox Tech Trend - Meetups</title>
         <meta name="description" content="Knox Tech Trend - Meetups" />
       </Helmet>
-      <div className={classes.root}>
-        <Grid container>
-          <Grid item xs={12} className={classes.grid}>
-            <MeetupList />
-          </Grid>
+      <Grid container>
+        <Grid item xs={12} className={classes.grid}>
+          <MeetupList />
         </Grid>
-      </div>
-    </Layout>
+      </Grid>
+    </div>
   )
 }
 
