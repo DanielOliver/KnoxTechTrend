@@ -4,17 +4,17 @@
   "version": "0.0.1",
   "author": "Daniel Oliver <danieloliversoftware@gmail.com>",
   "dependencies": {
-    "@material-ui/core": "^3.0.1",
-    "@material-ui/icons": "^3.0.1",
-    "gatsby": "2.0.12",
-    "gatsby-plugin-react-helmet": "3.0.0",
+    "@material-ui/core": "3.7.1",
+    "@material-ui/icons": "3.0.1",
+    "gatsby": "2.0.75",
+    "gatsby-plugin-react-helmet": "3.0.5",
     "gatsby-source-azure-storage": "^0.2.1",
-    "jss": "^9.8.7",
-    "react": "16.5.2",
-    "react-dom": "16.5.2",
-    "react-helmet": "^5.2.0",
-    "react-jss": "^8.6.1",
-    "react-vis": "^1.10.6"
+    "jss": "9.8.7",
+    "react": "16.7.0",
+    "react-dom": "16.7.0",
+    "react-helmet": "5.2.0",
+    "react-jss": "8.6.1",
+    "react-vis": "1.11.5"
   },
   "keywords": [
     "gatsby"
@@ -27,7 +27,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "prettier": "^1.12.0"
+    "prettier": "1.15.3"
   },
   "repository": {
     "type": "git",

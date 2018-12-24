@@ -8,6 +8,7 @@ import MeetupMonthGraph from '../components/MeetupMonthGraph';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import MeetupWeekdayGraph from "../components/MeetupWeekdayGraph";
+import {Helmet} from "react-helmet";
 
 const styles = theme => ({
     root: {
@@ -25,9 +26,15 @@ class MeetupTemplate extends React.Component {
     render() {
         const { classes } = this.props;
         const meetup = this.props.data.meetup
-        const events = (this.props.data.events || { edges: [] } ).edges
+        const events = (this.props.data.events || { edges: [] }).edges
+        const { eventsByMonth, eventsByWeekday, seoTitle, seoDescription } = this.props.pageContext
+
         return (
             <Layout>
+                <Helmet>
+                    <title>{seoTitle}</title>
+                    <meta name="description" content={seoDescription} />
+                </Helmet>
                 <Typography variant="display2" color="inherit" noWrap>
                     {meetup.FullName}
                 </Typography>
@@ -46,7 +53,7 @@ class MeetupTemplate extends React.Component {
                                 <Typography variant="display1" color="inherit" noWrap>
                                     Monthly Meetup Count (past year)
                                 </Typography>
-                                <MeetupMonthGraph meetupEvents={events} />
+                                <MeetupMonthGraph eventsByMonth={eventsByMonth} meetupEvents={events} />
                             </Paper>
                         </Grid>
                         <Grid item xs={12} className={classes.grid}>
@@ -54,7 +61,7 @@ class MeetupTemplate extends React.Component {
                                 <Typography variant="display1" color="inherit" noWrap>
                                     Meetups Per Day of Week (past year)
                                 </Typography>
-                                <MeetupWeekdayGraph meetupEvents={events} />
+                                <MeetupWeekdayGraph eventsByWeekday={eventsByWeekday} meetupEvents={events} />
                             </Paper>
                         </Grid>
                     </Grid>
@@ -89,6 +96,7 @@ export const pageQuery = graphql`
                     Day: MeetupDateLocal(formatString: "YYYY-MM-dd")
                     UtcTime: MeetupDateUtc
                     MeetupDayOfWeek: MeetupDateLocal(formatString: "dddd")
+                    MeetupMonthName: MeetupDateLocal(formatString: "MMMM")
                 }
             }
         }

@@ -129,7 +129,7 @@ class EventTable extends React.Component {
                         <TableCell>Event</TableCell>
                         {includeMeetup && <TableCell>Meetup</TableCell>}
                         <TableCell>Date</TableCell>
-                        <TableCell numeric>RSVPs</TableCell>
+                        <TableCell align="right">RSVPs</TableCell>
                         <TableCell>Venue</TableCell>
                     </TableRow>
                 </TableHead>
@@ -143,7 +143,7 @@ class EventTable extends React.Component {
                                 </TableCell>
                                 {includeMeetup && <TableCell>{row.MeetupName}</TableCell>}
                                 <TableCell>{row.MeetupDateLocal}</TableCell>
-                                <TableCell numeric>{row.RsvpCount}</TableCell>
+                                <TableCell align="right">{row.RsvpCount}</TableCell>
                                 <TableCell>{row.VenueName}</TableCell>
                             </TableRow>
                         );

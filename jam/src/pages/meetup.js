@@ -9,6 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import {Helmet} from "react-helmet";
 
 const styles = theme => ({
   root: {
@@ -27,7 +28,7 @@ const MeetupTable = ({ rows }) => {
       <TableHead>
         <TableRow>
           <TableCell>Meetup</TableCell>
-          <TableCell numeric>Members</TableCell>
+          <TableCell align="right">Members</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -38,7 +39,7 @@ const MeetupTable = ({ rows }) => {
               <TableCell component="th" scope="row">
                 <Link to={row.trendURL}>{row.FullName}</Link>
               </TableCell>
-              <TableCell numeric>
+              <TableCell align="right">
                 {row.MembersCount}
               </TableCell>
             </TableRow>
@@ -84,6 +85,10 @@ const MeetupPage = (props) => {
   const { classes } = props;
   return (
     <Layout>
+      <Helmet>
+        <title>Knox Tech Trend - Meetups</title>
+        <meta name="description" content="Knox Tech Trend - Meetups" />
+      </Helmet>
       <div className={classes.root}>
         <Grid container>
           <Grid item xs={12} className={classes.grid}>
