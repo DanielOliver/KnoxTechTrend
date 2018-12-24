@@ -7,6 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import MeetupMonthGraph from '../components/MeetupMonthGraph';
 import { StaticQuery, graphql } from "gatsby"
 import MeetupWeekdayGraph from '../components/MeetupWeekdayGraph';
+import {Helmet} from "react-helmet";
 
 const styles = theme => ({
   root: {
@@ -43,6 +44,10 @@ query meetupDateList {
       render={data => {
         return (
           <Layout>
+            <Helmet>
+              <title>Knox Tech Trend</title>
+              <meta name="description" content="Knox Tech Trend: A website for analytics of Knoxville, TN Technology Trends" />
+            </Helmet>
             <div className={classes.root}>
               <Grid container>
                 <Grid item xs={12} className={classes.grid}>
