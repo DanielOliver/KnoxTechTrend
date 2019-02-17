@@ -32,7 +32,7 @@ module.exports = function (context, myTimer) {
                     LastEventsQueriedLocal: localEvents,
                     Timezone: timezone
                 };
-                if (moment_tz().utc().subtract('30', 'day') >= moment(message.LastQueriedUTC)) {
+                if (moment_tz().utc().subtract('10', 'day') >= moment(message.LastQueriedUTC)) {
                     context.log(`Refreshing meetup: ${value.RowKey._}.`);
                     queueSvc.createMessage('meetup-add-details', JSON.stringify(message).trim(), function (error) { if (!error) { } });
                 }
